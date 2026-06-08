@@ -1,68 +1,81 @@
-﻿CandidateID,Candidate,Contributor Type,Contributor Name,Total Contributions,Number of Contributions
-7,Analilia Mejia,,ACTBLUE,479031,958
-7,Analilia Mejia,,CHC BOLD PAC,10000,2
-7,Analilia Mejia,,CORY PAC,10000,2
-7,Analilia Mejia,,COURAGE TO CHANGE,10000,2
-7,Analilia Mejia,,MEDICARE FOR ALL,10000,2
-7,Analilia Mejia,,"CONNELL, WILLIAM",7000,2
-7,Analilia Mejia,,"GOLDMAN, JILL",7000,4
-7,Analilia Mejia,,"HORNSTEIN, NORBERT",7000,2
-7,Analilia Mejia,,"MEJIA, ANALILIA",7000,2
-7,Analilia Mejia,,"MIRANDA, LUIS",7000,2
-3,George Latimer,,ACTBLUE,135622,447
-3,George Latimer,,AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE POLITICAL ACTION COMMITTEE,79360,59
-3,George Latimer,,AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES  P E O P L E,10000,4
-3,George Latimer,,"INTERNATIONAL ASSOCIATION OF SHEET METAL, AIR, RAIL AND TRANSPORTATION WORKERS POLITICAL ACTION LEAGUE",10000,3
-3,George Latimer,,ENTERPRISE RENT-A-CAR,8031,18
-3,George Latimer,,"ATLAS AIR WORLDWIDE HOLDINGS, INC. POLITICAL ACTION COMMITTEE",7000,4
-3,George Latimer,,"COLIN, ANN",7000,2
-3,George Latimer,,"COLIN, SAM",7000,2
-3,George Latimer,,"MCKELLAR, MARIE T",6000,3
-3,George Latimer,,AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC),5000,2
-6,Joe Hathaway,,WINRED,342843,365
-6,Joe Hathaway,,"ROSEN, ADEENA",14000,4
-6,Joe Hathaway,,"WEISS, JIM",14000,4
-6,Joe Hathaway,,"SPIROPOULOS, CHRISTOPHER",10731,5
-6,Joe Hathaway,,"BARER, SOL",9000,4
-6,Joe Hathaway,,"HADAR, AMIR",8500,6
-6,Joe Hathaway,,"HATHAWAY, JEFF",7116,3
-6,Joe Hathaway,,"CASH, THOMAS",7000,2
-6,Joe Hathaway,,"HATHAWAY, GINA",7000,3
-6,Joe Hathaway,,"JANOFF, ALLAN",7000,3
-8,Joseph Lewis,,"LEWIS, JOSEPH BARRY MR. II",100000,1
-8,Joseph Lewis,,"LEWIS, JOSEPH MR.",500,1
-8,Joseph Lewis,,"BANDMAN, DAYNA",250,1
-8,Joseph Lewis,,"DAVID, ROBERT",250,1
-8,Joseph Lewis,,"LEWIS, JOSEPH",250,1
-5,Justin Strickland,,"STRICKLAND, JUSTIN",46732,93
-5,Justin Strickland,,"CURREY, ISAAC",3500,2
-5,Justin Strickland,,"MEEHAN, REMI",3500,3
-5,Justin Strickland,,"SCHULTZ, JEFF",3500,1
-5,Justin Strickland,,"JARVIS, CHRISTOPHER",2500,1
-5,Justin Strickland,,"GALLAGHER, CHRISTOPHER",2000,1
-5,Justin Strickland,,"KIMMEL, ROBERT",2000,1
-5,Justin Strickland,,"PEEBLES, JAMIE",1500,1
-5,Justin Strickland,,"STEINBERG, DYLAN",1500,2
-5,Justin Strickland,,"BRENKUS, BROOKS",1250,6
-4,Lamonica McIver,,ACTBLUE,1162437,894
-4,Lamonica McIver,,AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES  P E O P L E,10000,4
-4,Lamonica McIver,,CONGRESSIONAL PROGRESSIVE CAUCUS PAC,10000,2
-4,Lamonica McIver,,"JOBS, EDUCATION, & FAMILIES FIRST  JEFF PAC",10000,2
-4,Lamonica McIver,,MEDICARE FOR ALL PAC,10000,2
-4,Lamonica McIver,,PAC TO THE FUTURE,10000,2
-4,Lamonica McIver,,PRUDENTIAL FINANCIAL INC. FEDERAL POLITICAL ACTION COMMITTEE (AKA - PRUDENTIAL FEDERAL PAC,10000,2
-4,Lamonica McIver,,PURPOSE PAC,10000,3
-4,Lamonica McIver,,SHORE PAC,10000,2
-4,Lamonica McIver,,VOTE MAMA,10000,3
-2,Rob Menendez (Congress),,ACTBLUE,487860,402
-2,Rob Menendez (Congress),,AIPAC PAC,263911,198
-2,Rob Menendez (Congress),,NORPAC,21270,21
-2,Rob Menendez (Congress),,AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES,10000,4
-2,Rob Menendez (Congress),,"CRH AMERICAS, INC. PAC",10000,4
-2,Rob Menendez (Congress),,AMERICAN OPTOMETRIC ASSOCIATION PAC,9500,5
-2,Rob Menendez (Congress),,CITIZENS BANK,8768,15
-2,Rob Menendez (Congress),,"DELL TECHNOLOGIES, INC. POLITICAL ACTION COMMITTEE",7500,3
-2,Rob Menendez (Congress),,"INTERNATIONAL ASSOCIATION OF SHEET METAL, AIR, RAIL AND TRANSPORTATION WORKERS POLITICAL ACTION LEAGUE",7500,2
-2,Rob Menendez (Congress),,PRUDENTIAL FINANCIAL INC. FEDERAL POLITICAL ACTION COMMITTEE (AKA - PRUDENTIAL FEDERAL PAC),7500,2
-1,Rob Menendez (Senate),,AMALGAMATED BANK,14180,9
-1,Rob Menendez (Senate),,CITIZENS BANK,2482,10
+CandidateID,Candidate,Contributor Type,Contributor Name,Total Contributions,Number of Contributions
+1,Anthony Nicodemo,Nan,,3233.0,2
+1,Anthony Nicodemo,Individual,David Hochberg,1000.0,1
+1,Anthony Nicodemo,Political Committee,Manion For New York,500.0,1
+1,Anthony Nicodemo,Individual,Kathleen Behrens,500.0,1
+1,Anthony Nicodemo,Individual,Edward Clark,500.0,1
+1,Anthony Nicodemo,Individual,John Rapaport,500.0,1
+1,Anthony Nicodemo,Individual,John Marino,500.0,1
+1,Anthony Nicodemo,Individual,Martin Ginsburg,500.0,1
+1,Anthony Nicodemo,Individual,William Harrington,500.0,1
+1,Anthony Nicodemo,Nan,Yonkers Democratic Committee,500.0,2
+2,Leslye Oquendo Thomas,Candidate/Candidate Spouse,Leslye Oquendo-Thomas,2000.0,2
+2,Leslye Oquendo Thomas,Candidate Family Member,Margarita Santiago,1000.0,2
+2,Leslye Oquendo Thomas,Political Committee,Hispanic Democrats Of Westchester,1000.0,1
+2,Leslye Oquendo Thomas,Individual,Alexandra Leighton,1000.0,1
+2,Leslye Oquendo Thomas,Individual,Shirley Thomas,1000.0,1
+2,Leslye Oquendo Thomas,Individual,Eulyn Douglas,800.0,1
+2,Leslye Oquendo Thomas,Nan,,722.0,3
+2,Leslye Oquendo Thomas,Individual,Eileen Conner,500.0,1
+2,Leslye Oquendo Thomas,Individual,Philip Armstrong,500.0,1
+2,Leslye Oquendo Thomas,Individual,Caroline Stern,400.0,1
+3,Wilson Terrero,"Partnership, Including Llps",M.S.Y. Group Inc.,1500.0,1
+3,Wilson Terrero,Nan,C.P.Y. Realty Group,1500.0,1
+3,Wilson Terrero,Individual,Nicholas S Capano,1000.0,2
+3,Wilson Terrero,Individual,Ammir S Rabadi,1000.0,2
+3,Wilson Terrero,Individual,Rafael Almonte,800.0,2
+3,Wilson Terrero,Individual,Marco A Rodriguez,700.0,3
+3,Wilson Terrero,Individual,John H Breheny,601.0,2
+3,Wilson Terrero,Individual,Francisco A Lopez,500.0,1
+3,Wilson Terrero,Individual,Luis A Muniz Jr,500.0,2
+3,Wilson Terrero,Candidate Family Member,Maria Terrero,500.0,1
+4,Andrea Stewart Cousins,Political Action Committee (Pac) | Political Committee,Construction Industry Council Nys Pac,11000.0,3
+4,Andrea Stewart Cousins,Union,Ny Administrative Employees Cwa Local,10000.0,2
+4,Andrea Stewart Cousins,Individual,Sean Mccance,10000.0,2
+4,Andrea Stewart Cousins,Political Action Committee (Pac),Nasrcc Political Education Committee,10000.0,2
+4,Andrea Stewart Cousins,Nan,Geico,10000.0,2
+4,Andrea Stewart Cousins,Political Action Committee (Pac),Bricklayers And Allied Craftworkers Pac,6000.0,2
+4,Andrea Stewart Cousins,Political Action Committee (Pac),Nysfda Pac | Nysfda-Pac,6000.0,2
+4,Andrea Stewart Cousins,Individual,Daniel Choi,6000.0,2
+4,Andrea Stewart Cousins,Political Action Committee (Pac),Int Brotherhood Of Teamsters 456 ...Pac,6000.0,2
+4,Andrea Stewart Cousins,Individual,Lucy Waletzky,6000.0,2
+5,Anthony Merante,Individual,Robert Marien,1500.0,2
+5,Anthony Merante,Individual,Francine E Weston,1000.0,4
+5,Anthony Merante,Nan,Hudson Group Of Westchester Inc,1000.0,1
+5,Anthony Merante,Political Committee,Friends Of Rob Astorino,1000.0,1
+5,Anthony Merante,Individual,Giovanni Salza,1000.0,1
+5,Anthony Merante,Individual,Joseph Royce,1000.0,1
+5,Anthony Merante,Individual,Jean Marien,1000.0,2
+5,Anthony Merante,Individual,Brandon Neider,1000.0,3
+5,Anthony Merante,Individual,Anthony Salza,1000.0,1
+5,Anthony Merante,Individual,Karen Celio,900.0,4
+6,Frank Jereis,Individual,Sana Sayegh,3250.0,2
+6,Frank Jereis,Individual,Jared Levine,3000.0,1
+6,Frank Jereis,Nan,International Brotherhood Of Teamsters L,3000.0,1
+6,Frank Jereis,Individual,Ammir Rabadi,3000.0,1
+6,Frank Jereis,Individual,Ariq Rabadi,3000.0,1
+6,Frank Jereis,Individual,John Zaremba,3000.0,1
+6,Frank Jereis,Individual,Christine Soifer,3000.0,1
+6,Frank Jereis,Nan,Wjm Development Corp,3000.0,1
+6,Frank Jereis,Individual,Evan Sacks,3000.0,1
+6,Frank Jereis,Individual,Joseph Romano,3000.0,1
+7,Jeannette Garcia,Political Action Committee (Pac),Hispanic Democrats Of Westchester,1500.0,1
+7,Jeannette Garcia,Individual,Kirsten Foy,1000.0,1
+7,Jeannette Garcia,Individual,Nathalia Fernandez,650.0,2
+7,Jeannette Garcia,Individual,Artemis Diaz,550.0,1
+7,Jeannette Garcia,Individual,Barry Nesson,500.0,1
+7,Jeannette Garcia,Individual,Carlos Perez Fernandez,500.0,5
+7,Jeannette Garcia,Individual,Diego J Loinaz Martin,500.0,1
+7,Jeannette Garcia,Individual,Amanda Septimo,500.0,1
+7,Jeannette Garcia,Individual,Maria Kercado,500.0,2
+7,Jeannette Garcia,Individual,Mimi Henriquez,500.0,1
+8,John Isaac,Nan,Techonology Innovation,895.0,1
+8,John Isaac,Individual,Vincent Aceste,500.0,1
+8,John Isaac,Candidate Family Member,Alisha Isaac,350.0,1
+8,John Isaac,Individual,Nancy Magliari,300.0,3
+8,John Isaac,Individual,Hari Singh,260.0,1
+8,John Isaac,Candidate Family Member,Josh Isaac,260.0,1
+8,John Isaac,Individual,Bimla Singh,250.0,1
+8,John Isaac,Individual,Harry Singh,250.0,1
+8,John Isaac,Individual,Anthony Merante,250.0,1
+8,John Isaac,Individual,Aleyamma Vinoi,250.0,1
