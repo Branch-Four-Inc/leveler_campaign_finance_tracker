@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yonkers Campaign Finance Tracker</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; display: flex; height: 100vh; overflow: hidden; }
+
+  #sidebar { width: 220px; min-width: 220px; background: #161b27; border-right: 1px solid #1e2535; display: flex; flex-direction: column; padding: 24px 0; }
+  .sidebar-header { padding: 0 20px 24px; border-bottom: 1px solid #1e2535; }
+  .sidebar-cycle { font-size: 11px; color: #6b7280; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+  .sidebar-title { font-size: 17px; font-weight: 700; line-height: 1.3; }
+  nav { padding: 16px 0; }
+  nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 14px; color: #94a3b8; text-decoration: none; cursor: pointer; transition: background .15s; }
+  nav a:hover { background: #1e2535; color: #e2e8f0; }
+  nav a.active { background: #1e2a3a; color: #fff; border-left: 3px solid #3b82f6; }
+  nav a .icon { width: 16px; text-align: center; }
+  .nav-back { padding: 10px 20px 0; }
+  .nav-back button { background: none; border: none; color: #6b7280; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 0; }
+  .nav-back button:hover { color: #e2e8f0; }
+  .nav-section { padding: 8px 20px 4px; font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: .1em; }
+
+  #main { flex: 1; overflow-y: auto; padding: 32px 36px; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
+  .stat-card { background: #161b27; border: 1px solid #1e2535; border-radius: 10px; padding: 18px 20px; }
+  .stat-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
+  .stat-value { font-size: 26px; font-weight: 700; }
+  .stat-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+  .race-section { margin-bottom: 28px; }
+  .race-badge { display: inline-block; background: #22304a; color: #93c5fd; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+  .candidate-table { background: #161b27; border: 1px solid #1e2535; border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+  .table-header { display: grid; grid-template-columns: 1fr 160px 160px; padding: 10px 16px; font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: .07em; border-bottom: 1px solid #1e2535; }
+  .candidate-row { display: grid; grid-template-columns: 1fr 160px 160px; padding: 14px 16px; align-items: center; border-bottom: 1px solid #1e2535; cursor: pointer; transition: background .15s; }
+  .candidate-row:last-child { border-bottom: none; }
+  .candidate-row:hover { background: #1e2535; }
+  .subtotal-row { display: grid; grid-template-columns: 1fr 160px 160px; padding: 10px 16px; font-size: 13px; color: #6b7280; border-top: 1px solid #1e2535; background: #0f1117; }
+  .cand-info { display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .cand-name { font-size: 14px; font-weight: 500; }
+  .raised-col { font-size: 14px; font-weight: 600; }
+  .share-col { display: flex; align-items: center; gap: 8px; }
+  .share-bar-bg { flex: 1; height: 6px; background: #1e2535; border-radius: 3px; overflow: hidden; }
+  .share-bar { height: 100%; border-radius: 3px; }
+  .share-pct { font-size: 12px; color: #6b7280; width: 36px; text-align: right; }
+
+  /* Candidate detail */
+  .detail-nav { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid #1e2535; padding-bottom: 0; }
+  .detail-tab { padding: 10px 16px; font-size: 13px; color: #6b7280; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s; }
+  .detail-tab:hover { color: #e2e8f0; }
+  .detail-tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+  .detail-panel { display: none; }
+  .detail-panel.active { display: block; }
+
+  .data-table { background: #161b27; border: 1px solid #1e2535; border-radius: 10px; overflow: hidden; }
+  .data-table-header { display: grid; padding: 10px 16px; font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: .07em; border-bottom: 1px solid #1e2535; }
+  .data-row { display: grid; padding: 12px 16px; font-size: 13px; border-bottom: 1px solid #1e2535; align-items: center; }
+  .data-row:last-child { border-bottom: none; }
+  .data-row:hover { background: #1e2535; }
+  .cols-2 { grid-template-columns: 1fr 120px; }
+  .cols-3 { grid-template-columns: 1fr 1fr 120px; }
+  .cols-4 { grid-template-columns: 2fr 1fr 80px 120px; }
+  .amount { font-size: 14px; font-weight: 600; color: #60a5fa; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: #1e3a5f; color: #93c5fd; }
+
+  .type-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 13px; }
+  .type-bar-label { width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .type-bar-bg { flex: 1; height: 8px; background: #1e2535; border-radius: 4px; overflow: hidden; }
+  .type-bar-fill { height: 100%; border-radius: 4px; background: #3b82f6; }
+  .type-bar-pct { font-size: 12px; color: #6b7280; width: 40px; text-align: right; }
+  .type-bar-amt { font-size: 13px; font-weight: 600; width: 100px; text-align: right; }
+
+  .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .type-card { background: #161b27; border: 1px solid #1e2535; border-radius: 10px; padding: 18px 20px; }
+  .type-card-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+  .type-card-value { font-size: 20px; font-weight: 700; }
+  .type-card-sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .page-sub { font-size: 13px; color: #6b7280; margin-bottom: 24px; }
+
+  .color-0 { background: #3b82f6; }
+  .color-1 { background: #f59e0b; }
+  .color-2 { background: #10b981; }
+  .color-3 { background: #ef4444; }
+  .color-4 { background: #8b5cf6; }
+  .color-5 { background: #ec4899; }
+  .empty { color: #6b7280; font-size: 13px; padding: 24px 16px; }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-cycle">Yonkers, NY · 2024 Cycle</div>
+    <div class="sidebar-title">Campaign<br>Finance Tracker</div>
+  </div>
+  <div id="sidebar-summary-nav">
+    <nav>
+      <a class="active" data-page="summary"><span class="icon">▦</span> Summary</a>
+    </nav>
+  </div>
+  <div id="sidebar-detail-nav" style="display:none">
+    <div class="nav-back">
+      <button id="back-btn">← All Races</button>
+    </div>
+    <div class="nav-section" id="detail-nav-candidate"></div>
+    <nav>
+      <a class="active" data-tab="contrib-types"><span class="icon">◑</span> Contribution Types</a>
+      <a data-tab="pac"><span class="icon">★</span> PAC Contributors</a>
+      <a data-tab="corporate"><span class="icon">⬡</span> Corporate</a>
+      <a data-tab="top"><span class="icon">▲</span> Top Contributors</a>
+    </nav>
+  </div>
+</div>
+
+<div id="main">
+  <div id="summary" class="page active"></div>
+  <div id="candidate-detail" class="page"></div>
+</div>
+
+<script>
+const COLORS = ['#3b82f6','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+
+function fmt(n) { return '$' + Number(n).toLocaleString(undefined, {minimumFractionDigits:0, maximumFractionDigits:0}); }
+function initials(name) { return name.split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join(''); }
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const keys = lines[0].split(',').map(k => k.replace(/^"|"$/g,'').trim());
+  return lines.slice(1).map(line => {
+    // handle quoted fields with commas
+    const vals = [];
+    let cur = '', inQ = false;
+    for (const ch of line) {
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { vals.push(cur.trim()); cur = ''; }
+      else cur += ch;
+    }
+    vals.push(cur.trim());
+    return Object.fromEntries(keys.map((k,i) => [k, vals[i] ?? '']));
+  });
+}
+
+let DATA = {};
+
+async function loadAll() {
+  const files = ['total_contributions','contributor_types','pac_contributors','corporate_contributors','top_contributors'];
+  const results = await Promise.all(files.map(f => fetch(`data_output/${f}.csv`).then(r => r.text())));
+  files.forEach((f, i) => DATA[f] = parseCSV(results[i]));
+  renderSummary();
+}
+
+function renderSummary() {
+  const totals = DATA.total_contributions;
+  const grandTotal = totals.reduce((s,r) => s + +r['Total Contributions'], 0);
+
+  // Group by race (Location + Office)
+  const byRace = {};
+  totals.forEach(r => {
+    const key = `${r.Office} – ${r.Location}`;
+    (byRace[key] = byRace[key] || []).push(r);
+  });
+
+  let racesHTML = '';
+  Object.entries(byRace).forEach(([race, candidates], ri) => {
+    const sorted = [...candidates].sort((a,b) => +b['Total Contributions'] - +a['Total Contributions']);
+    const raceTotal = sorted.reduce((s,r) => s + +r['Total Contributions'], 0);
+
+    const rows = sorted.map((c, ci) => {
+      const pct = raceTotal ? Math.round(+c['Total Contributions'] / raceTotal * 100) : 0;
+      const color = COLORS[(ri * 3 + ci) % COLORS.length];
+      return `<div class="candidate-row" data-id="${c.CandidateID}" data-name="${c.Candidate}">
+        <div class="cand-info">
+          <div class="avatar" style="background:${color}22;color:${color}">${initials(c.Candidate)}</div>
+          <div class="cand-name">${c.Candidate}</div>
+        </div>
+        <div class="raised-col">${fmt(c['Total Contributions'])}</div>
+        <div class="share-col">
+          <div class="share-bar-bg"><div class="share-bar" style="width:${pct}%;background:${color}"></div></div>
+          <span class="share-pct">${pct}%</span>
+        </div>
+      </div>`;
+    }).join('');
+
+    racesHTML += `<div class="race-section">
+      <div class="race-badge">${race}</div>
+      <div class="candidate-table">
+        <div class="table-header"><span>Candidate</span><span>Total Raised</span><span>Share of Race</span></div>
+        ${rows}
+        <div class="subtotal-row"><span>Race Total</span><span>${fmt(raceTotal)}</span><span></span></div>
+      </div>
+    </div>`;
+  });
+
+  const numRaces = Object.keys(byRace).length;
+  document.getElementById('summary').innerHTML = `
+    <h2>Summary</h2>
+    <div class="page-sub">All candidates grouped by race</div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Total Raised</div><div class="stat-value">${fmt(grandTotal)}</div><div class="stat-sub">All candidates</div></div>
+      <div class="stat-card"><div class="stat-label">Candidates</div><div class="stat-value">${totals.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Races</div><div class="stat-value">${numRaces}</div></div>
+    </div>
+    ${racesHTML}`;
+
+  document.querySelectorAll('.candidate-row').forEach(row => {
+    row.addEventListener('click', () => showCandidate(row.dataset.id, row.dataset.name));
+  });
+}
+
+function showCandidate(id, name) {
+  // Switch nav
+  document.getElementById('sidebar-summary-nav').style.display = 'none';
+  document.getElementById('sidebar-detail-nav').style.display = 'block';
+  document.getElementById('detail-nav-candidate').textContent = name;
+
+  document.getElementById('summary').classList.remove('active');
+  document.getElementById('candidate-detail').classList.add('active');
+
+  // Render tabs
+  renderCandidateDetail(id, name);
+
+  // Set first tab active
+  document.querySelectorAll('#sidebar-detail-nav nav a').forEach((a,i) => a.classList.toggle('active', i===0));
+  showDetailPanel('contrib-types');
+}
+
+document.getElementById('back-btn').addEventListener('click', () => {
+  document.getElementById('sidebar-summary-nav').style.display = 'block';
+  document.getElementById('sidebar-detail-nav').style.display = 'none';
+  document.getElementById('candidate-detail').classList.remove('active');
+  document.getElementById('summary').classList.add('active');
+});
+
+document.querySelectorAll('#sidebar-detail-nav nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelectorAll('#sidebar-detail-nav nav a').forEach(x => x.classList.remove('active'));
+    a.classList.add('active');
+    showDetailPanel(a.dataset.tab);
+  });
+});
+
+function showDetailPanel(tab) {
+  document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById(`panel-${tab}`);
+  if (el) el.classList.add('active');
+}
+
+function renderCandidateDetail(id, name) {
+  const types = DATA.contributor_types.filter(r => r.CandidateID === id);
+  const pacs = DATA.pac_contributors.filter(r => r.CandidateID === id);
+  const corps = DATA.corporate_contributors.filter(r => r.CandidateID === id);
+  const tops = DATA.top_contributors.filter(r => r.CandidateID === id);
+
+  document.getElementById('candidate-detail').innerHTML = `
+    <h2>${name}</h2>
+    <div class="page-sub">Campaign finance detail</div>
+    <div id="panel-contrib-types" class="detail-panel active">${renderContribTypes(types)}</div>
+    <div id="panel-pac" class="detail-panel">${renderSimpleTable(pacs, 'PAC Contributors', ['Contributor Name','Total Contributions'])}</div>
+    <div id="panel-corporate" class="detail-panel">${renderSimpleTable(corps, 'Corporate Contributors', ['Contributor Name','Total Contributions'])}</div>
+    <div id="panel-top" class="detail-panel">${renderTopContribs(tops)}</div>`;
+}
+
+function renderContribTypes(types) {
+  if (!types.length) return '<div class="empty">No data available.</div>';
+  const total = types.reduce((s,r) => s + +r['Total Contributions'], 0);
+  const sorted = [...types].sort((a,b) => +b['Total Contributions'] - +a['Total Contributions']);
+
+  const cards = sorted.slice(0,3).map(r => `
+    <div class="type-card">
+      <div class="type-card-label">${r['Contributor Type']}</div>
+      <div class="type-card-value" style="color:#60a5fa">${fmt(r['Total Contributions'])}</div>
+      <div class="type-card-sub">${r['Number of Contributions']} contributions</div>
+    </div>`).join('');
+
+  const bars = sorted.map(r => {
+    const pct = total ? Math.round(+r['Total Contributions'] / total * 100) : 0;
+    return `<div class="type-bar-row">
+      <div class="type-bar-label">${r['Contributor Type']}</div>
+      <div class="type-bar-bg"><div class="type-bar-fill" style="width:${pct}%"></div></div>
+      <div class="type-bar-pct">${pct}%</div>
+      <div class="type-bar-amt">${fmt(r['Total Contributions'])}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="type-grid">${cards}</div>
+    <div class="candidate-table" style="padding:20px">${bars}</div>`;
+}
+
+function renderSimpleTable(rows, title, cols) {
+  if (!rows.length) return '<div class="empty">No data available.</div>';
+  const sorted = [...rows].sort((a,b) => +b[cols[1]] - +a[cols[1]]);
+  const tableRows = sorted.map(r => `
+    <div class="data-row cols-2">
+      <div>${r[cols[0]]}</div>
+      <div class="amount">${fmt(r[cols[1]])}</div>
+    </div>`).join('');
+  return `<div class="data-table">
+    <div class="data-table-header cols-2"><span>${cols[0]}</span><span>Amount</span></div>
+    ${tableRows}
+  </div>`;
+}
+
+function renderTopContribs(rows) {
+  if (!rows.length) return '<div class="empty">No data available.</div>';
+  const sorted = [...rows].sort((a,b) => +b['Total Contributions'] - +a['Total Contributions']);
+  const tableRows = sorted.map(r => `
+    <div class="data-row cols-3">
+      <div>${r['Contributor Name']}</div>
+      <div><span class="badge">${r['Contributor Type']}</span></div>
+      <div class="amount">${fmt(r['Total Contributions'])}</div>
+    </div>`).join('');
+  return `<div class="data-table">
+    <div class="data-table-header cols-3"><span>Name</span><span>Type</span><span>Amount</span></div>
+    ${tableRows}
+  </div>`;
+}
+
+loadAll();
+</script>
+</body>
+</html>
