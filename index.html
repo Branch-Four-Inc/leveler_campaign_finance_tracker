@@ -160,7 +160,7 @@
   </div>
   <div id="sidebar-detail-nav" style="display:none">
     <div class="nav-back">
-      <button id="back-btn">← All Races</button>
+      <button id="back-btn">← All Elections</button>
     </div>
     <div class="nav-section" id="detail-nav-candidate"></div>
     <nav>
@@ -261,9 +261,9 @@ function renderSummary() {
     racesHTML += `<div class="race-section">
       <div class="race-badge">${race}</div>
       <div class="candidate-table">
-        <div class="table-header"><span>Candidate</span><span>Total Raised</span><span>Share of Race</span></div>
+        <div class="table-header"><span>Candidate</span><span>Total Raised</span><span>Share of Election</span></div>
         ${rows}
-        <div class="subtotal-row"><span>Race Total</span><span>${fmt(raceTotal)}</span><span></span></div>
+        <div class="subtotal-row"><span>Election Total</span><span>${fmt(raceTotal)}</span><span></span></div>
       </div>
     </div>`;
   });
@@ -271,11 +271,11 @@ function renderSummary() {
   const numRaces = Object.keys(byRace).length;
   document.getElementById('summary').innerHTML = `
     <h2>Summary</h2>
-    <div class="page-sub">All candidates grouped by race</div>
+    <div class="page-sub">All candidates grouped by election</div>
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-label">Total Raised</div><div class="stat-value">${fmt(grandTotal)}</div><div class="stat-sub">All candidates</div></div>
       <div class="stat-card"><div class="stat-label">Candidates</div><div class="stat-value">${totals.length}</div></div>
-      <div class="stat-card"><div class="stat-label">Races</div><div class="stat-value">${numRaces}</div></div>
+      <div class="stat-card"><div class="stat-label">Elections</div><div class="stat-value">${numRaces}</div></div>
     </div>
     ${racesHTML}`;
 
