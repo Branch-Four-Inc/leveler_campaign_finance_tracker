@@ -94,6 +94,15 @@ def main(input_dir: str,
     
     candidate_info = df.drop_duplicates(['Candidate'])[['Candidate', 'State', 'Location', 'Office', 'Pull_date']].reset_index(drop = True)
     candidate_info = candidate_info.sort_values(['Location', 'Office'])
+    
+    # ADD KISHA SKIPPER IN MANUALLY
+    candidate_info = pd.concat([candidate_info, 
+               pd.DataFrame({'Candidate': 'Kisha Skipper (D)', 
+                             'State': 'Ny', 
+                             'Location': '15th District', 
+                             'Office': 'County Legislator', 
+                             'Pull_date': '2026-06-07'}, index = [0])], axis = 0)
+    
 
     # create CandidateID column
     candidate_info['CandidateID'] = list(range(1, len(file_names) +1 ) )
@@ -149,6 +158,15 @@ def main(input_dir: str,
              }
     ) ).reset_index(drop = False)
     summary['Total Contributions'] = round_amount(summary['Total Contributions'] )
+    
+    summary = pd.concat([pd.DataFrame({'CandidateID': 9,
+        'Candidate': 'Kisha Skipper (D)', 
+                             'Location': '15th District', 
+                             'Office': 'County Legislator', 
+                             'Total Contributions': 0}, index = [0]), 
+               summary], axis = 0)
+    
+    
 
 
     # contributor type
