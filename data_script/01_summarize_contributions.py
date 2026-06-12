@@ -31,12 +31,14 @@ def main(input_dir: str,
          output_dir: str,
          contribution_start: str, 
          contribution_end: str, 
+         newsroom: str, 
          file_format = 'csv'): 
     
     input_dir = 'C:\\Users\\stm4z\OneDrive - branchfour.org\\Local Data Lab\\The Leveler\\election_finances\\raw_contributions'
     output_dir = 'C:\\Users\\stm4z\OneDrive - branchfour.org\\Local Data Lab\\Repositories\\leveler_campaign_finance_tracker\\data_output'
     contribution_start = "2024-11-09"
     contribution_end = "2026-06-06"
+    newsroom = 'The Leveler News'
     
     file_names = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
     
@@ -50,10 +52,10 @@ def main(input_dir: str,
         
         breaks = [i for i, letter in enumerate(file_names[i]) if letter == "_"]
         
-        if len(breaks)< 4: 
+        if len(breaks)< 5: 
             print(f"Identifying information is missing in the filename {file_names[i]}")
             
-        if len(breaks)> 4: 
+        if len(breaks)> 5: 
             print(f"There is an extra _ in the filename {file_names[i]}")
         
         # parse candidate information
@@ -61,11 +63,12 @@ def main(input_dir: str,
         state = file_names[i][breaks[0] + 1 : breaks[1] ] 
         location = file_names[i][breaks[1] + 1: breaks[2] ] 
         office = file_names[i][breaks[2] + 1: breaks[3] ] 
-        candidate_name = file_names[i][breaks[3] + 1 : len(file_names[i]) - (len(file_format) +1) ] 
+        candidate_name = file_names[i][breaks[3] + 1 : breaks[4] ] 
+        party = file_names[i][breaks[4] + 1 : len(file_names[i]) - (len(file_format) +1) ] 
         
         # save candidate info to df 
         temp_df = pd.read_csv(input_dir + '\\' + file_names[i], index_col=False, engine="python")
-        temp_df['Candidate'] = candidate_name
+        temp_df['Candidate'] = candidate_name + f' ({party})'
         temp_df['Pull_date'] = pull_date
         temp_df['State'] = state
         temp_df['Location'] = location
@@ -115,15 +118,21 @@ def main(input_dir: str,
     df2["Contributor Type"] = (
         df2["Contributor Type"]
         .replace(r"^\s*$", pd.NA, regex=True)
-        .fillna("NaN")
+        .fillna("(Unknown)")
     )
-    
+
+    # set to title case 
     df2["Contributor Type"] = df2["Contributor Type"].str.strip().str.title()
+    df2["Contributor Type"] = df2["Contributor Type"].str.replace("Pac", "PAC")
     
     # clean contributor name 
     df2["Contributor Name_clean"] = clean_donor_name(df2["Contributor Name"])
     
     df2["Contributor Name"] = df2["Contributor Name"].str.strip().str.title()
+    
+    # make LLC and LLPs uppercase
+    df2["Contributor Name"] = df2["Contributor Name"].str.replace("Llp", "LLP")
+    df2["Contributor Name"] = df2["Contributor Name"].str.replace("Llc", "LLC")
     
     # should group contributor by name and address to when calculating total amount (some people with same name could be grouped together)
     # need to clean addresses then (cir -> circle, ave -> avenue, apartment numbers, etc.)
@@ -151,6 +160,8 @@ def main(input_dir: str,
              "Number of Contributions": pd.NamedAgg(column="Amount", aggfunc="count"), 
          }
     ) ).reset_index(drop = False)
+    
+    
     
     contrib_summary['Total Contributions'] = round_amount(contrib_summary['Total Contributions'] )
 
@@ -205,6 +216,13 @@ def main(input_dir: str,
     
     corporates_summary['Total Contributions'] = round_amount(corporates_summary['Total Contributions'] )
     
+    
+    # parmeters to show on UI
+    parameters = pd.DataFrame({'Newsroom': newsroom,
+                  'State': state.upper(), 
+                  'Data Start': contribution_start, 
+                  'Data End': contribution_end}, index = [0])
+    
 
 
     # export csvs
@@ -213,6 +231,7 @@ def main(input_dir: str,
     donor_summary.to_csv(output_dir + '\\' + 'top_contributors.csv', index = False)
     pacs_summary.to_csv(output_dir + '\\' + 'pac_contributors.csv', index = False)
     corporates_summary.to_csv(output_dir + '\\' + 'corporate_contributors.csv', index = False)
+    parameters.to_csv(output_dir + '\\' + 'parameters.csv', index = False)
 
 
 #donor_summary.to_csv("donors_over_3000_summary.csv", index=False)
@@ -227,4 +246,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    main(args.input_dir, args.output_dir, args.contribution_start, args.contribution_end, args.file_format)
+    main(args.input_dir, args.output_dir, args.contribution_start, args.contribution_end, args.newsroom, args.file_format)

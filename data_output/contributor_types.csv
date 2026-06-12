@@ -1,46 +1,46 @@
 CandidateID,Candidate,Contributor Type,Total Contributions,Number of Contributions
-1,Anthony Nicodemo,Individual,20927.0,112
-1,Anthony Nicodemo,Nan,3733.0,4
-1,Anthony Nicodemo,Political Action Committee (Pac),300.0,1
-1,Anthony Nicodemo,Political Committee,500.0,1
-1,Anthony Nicodemo,Union,300.0,1
-2,Leslye Oquendo Thomas,Candidate Family Member,1800.0,7
-2,Leslye Oquendo Thomas,Candidate/Candidate Spouse,2000.0,2
-2,Leslye Oquendo Thomas,Individual,15093.0,95
-2,Leslye Oquendo Thomas,Nan,722.0,3
-2,Leslye Oquendo Thomas,Political Committee,1000.0,1
-3,Wilson Terrero,Candidate Family Member,500.0,1
-3,Wilson Terrero,Individual,13726.0,49
-3,Wilson Terrero,Nan,4000.0,8
-3,Wilson Terrero,"Partnership, Including Llps",3700.0,7
-3,Wilson Terrero,Sole Proprietorship,500.0,1
-4,Andrea Stewart Cousins,Association,4000.0,7
-4,Andrea Stewart Cousins,Individual,203244.0,248
-4,Andrea Stewart Cousins,Nan,45500.0,21
-4,Andrea Stewart Cousins,Other,3750.0,4
-4,Andrea Stewart Cousins,"Partnership, Including Llps",12000.0,9
-4,Andrea Stewart Cousins,Political Action Committee (Pac),242600.0,139
-4,Andrea Stewart Cousins,Political Committee,16500.0,12
-4,Andrea Stewart Cousins,Professional/Limited Liability Company (Pllc/Llc),3500.0,4
-4,Andrea Stewart Cousins,Union,16250.0,9
-5,Anthony Merante,Individual,33021.0,194
-5,Anthony Merante,Nan,4174.0,17
-5,Anthony Merante,"Partnership, Including Llps",500.0,1
-5,Anthony Merante,Political Committee,1099.0,2
-5,Anthony Merante,Professional/Limited Liability Company (Pllc/Llc),225.0,2
-5,Anthony Merante,Union,1196.0,4
-6,Frank Jereis,Individual,104972.0,301
-6,Frank Jereis,Nan,10700.0,9
-6,Frank Jereis,"Partnership, Including Llps",750.0,2
-6,Frank Jereis,Political Action Committee (Pac),1500.0,4
-6,Frank Jereis,Political Committee,550.0,3
-6,Frank Jereis,Professional/Limited Liability Company (Pllc/Llc),1500.0,5
-6,Frank Jereis,Union,300.0,2
-7,Jeannette Garcia,Candidate Family Member,125.0,3
-7,Jeannette Garcia,Individual,21595.0,234
-7,Jeannette Garcia,Political Action Committee (Pac),1500.0,1
-8,John Isaac,Candidate Family Member,610.0,2
-8,John Isaac,Candidate/Candidate Spouse,250.0,1
-8,John Isaac,Individual,9267.0,104
-8,John Isaac,Nan,895.0,1
-8,John Isaac,Sole Proprietorship,47.0,1
+1,Anthony Nicodemo (D),(Unknown),3733.0,4
+1,Anthony Nicodemo (D),Individual,20927.0,112
+1,Anthony Nicodemo (D),Political Action Committee (PAC),300.0,1
+1,Anthony Nicodemo (D),Political Committee,500.0,1
+1,Anthony Nicodemo (D),Union,300.0,1
+2,Leslye Oquendo-Thomas (D),(Unknown),722.0,3
+2,Leslye Oquendo-Thomas (D),Candidate Family Member,1800.0,7
+2,Leslye Oquendo-Thomas (D),Candidate/Candidate Spouse,2000.0,2
+2,Leslye Oquendo-Thomas (D),Individual,15093.0,95
+2,Leslye Oquendo-Thomas (D),Political Committee,1000.0,1
+3,Wilson Terrero (D),(Unknown),4000.0,8
+3,Wilson Terrero (D),Candidate Family Member,500.0,1
+3,Wilson Terrero (D),Individual,13726.0,49
+3,Wilson Terrero (D),"Partnership, Including Llps",3700.0,7
+3,Wilson Terrero (D),Sole Proprietorship,500.0,1
+4,Andrea Stewart-Cousins (D),(Unknown),45500.0,21
+4,Andrea Stewart-Cousins (D),Association,4000.0,7
+4,Andrea Stewart-Cousins (D),Individual,203244.0,248
+4,Andrea Stewart-Cousins (D),Other,3750.0,4
+4,Andrea Stewart-Cousins (D),"Partnership, Including Llps",12000.0,9
+4,Andrea Stewart-Cousins (D),Political Action Committee (PAC),242600.0,139
+4,Andrea Stewart-Cousins (D),Political Committee,16500.0,12
+4,Andrea Stewart-Cousins (D),Professional/Limited Liability Company (Pllc/Llc),3500.0,4
+4,Andrea Stewart-Cousins (D),Union,16250.0,9
+5,Anthony Merante (R),(Unknown),4174.0,17
+5,Anthony Merante (R),Individual,33021.0,194
+5,Anthony Merante (R),"Partnership, Including Llps",500.0,1
+5,Anthony Merante (R),Political Committee,1099.0,2
+5,Anthony Merante (R),Professional/Limited Liability Company (Pllc/Llc),225.0,2
+5,Anthony Merante (R),Union,1196.0,4
+6,Frank Jereis (D),(Unknown),10700.0,9
+6,Frank Jereis (D),Individual,104972.0,301
+6,Frank Jereis (D),"Partnership, Including Llps",750.0,2
+6,Frank Jereis (D),Political Action Committee (PAC),1500.0,4
+6,Frank Jereis (D),Political Committee,550.0,3
+6,Frank Jereis (D),Professional/Limited Liability Company (Pllc/Llc),1500.0,5
+6,Frank Jereis (D),Union,300.0,2
+7,Jeannette Garcia (D),Candidate Family Member,125.0,3
+7,Jeannette Garcia (D),Individual,21595.0,234
+7,Jeannette Garcia (D),Political Action Committee (PAC),1500.0,1
+8,John Isaac (R),(Unknown),895.0,1
+8,John Isaac (R),Candidate Family Member,610.0,2
+8,John Isaac (R),Candidate/Candidate Spouse,250.0,1
+8,John Isaac (R),Individual,9267.0,104
+8,John Isaac (R),Sole Proprietorship,47.0,1

@@ -1,81 +1,81 @@
 CandidateID,Candidate,Contributor Type,Contributor Name,Total Contributions,Number of Contributions
-1,Anthony Nicodemo,Nan,,3233.0,2
-1,Anthony Nicodemo,Individual,David Hochberg,1000.0,1
-1,Anthony Nicodemo,Political Committee,Manion For New York,500.0,1
-1,Anthony Nicodemo,Individual,Kathleen Behrens,500.0,1
-1,Anthony Nicodemo,Individual,Edward Clark,500.0,1
-1,Anthony Nicodemo,Individual,John Rapaport,500.0,1
-1,Anthony Nicodemo,Individual,John Marino,500.0,1
-1,Anthony Nicodemo,Individual,Martin Ginsburg,500.0,1
-1,Anthony Nicodemo,Individual,William Harrington,500.0,1
-1,Anthony Nicodemo,Nan,Yonkers Democratic Committee,500.0,2
-2,Leslye Oquendo Thomas,Candidate/Candidate Spouse,Leslye Oquendo-Thomas,2000.0,2
-2,Leslye Oquendo Thomas,Candidate Family Member,Margarita Santiago,1000.0,2
-2,Leslye Oquendo Thomas,Political Committee,Hispanic Democrats Of Westchester,1000.0,1
-2,Leslye Oquendo Thomas,Individual,Alexandra Leighton,1000.0,1
-2,Leslye Oquendo Thomas,Individual,Shirley Thomas,1000.0,1
-2,Leslye Oquendo Thomas,Individual,Eulyn Douglas,800.0,1
-2,Leslye Oquendo Thomas,Nan,,722.0,3
-2,Leslye Oquendo Thomas,Individual,Eileen Conner,500.0,1
-2,Leslye Oquendo Thomas,Individual,Philip Armstrong,500.0,1
-2,Leslye Oquendo Thomas,Individual,Caroline Stern,400.0,1
-3,Wilson Terrero,"Partnership, Including Llps",M.S.Y. Group Inc.,1500.0,1
-3,Wilson Terrero,Nan,C.P.Y. Realty Group,1500.0,1
-3,Wilson Terrero,Individual,Nicholas S Capano,1000.0,2
-3,Wilson Terrero,Individual,Ammir S Rabadi,1000.0,2
-3,Wilson Terrero,Individual,Rafael Almonte,800.0,2
-3,Wilson Terrero,Individual,Marco A Rodriguez,700.0,3
-3,Wilson Terrero,Individual,John H Breheny,601.0,2
-3,Wilson Terrero,Individual,Francisco A Lopez,500.0,1
-3,Wilson Terrero,Individual,Luis A Muniz Jr,500.0,2
-3,Wilson Terrero,Candidate Family Member,Maria Terrero,500.0,1
-4,Andrea Stewart Cousins,Political Action Committee (Pac) | Political Committee,Construction Industry Council Nys Pac,11000.0,3
-4,Andrea Stewart Cousins,Union,Ny Administrative Employees Cwa Local,10000.0,2
-4,Andrea Stewart Cousins,Individual,Sean Mccance,10000.0,2
-4,Andrea Stewart Cousins,Political Action Committee (Pac),Nasrcc Political Education Committee,10000.0,2
-4,Andrea Stewart Cousins,Nan,Geico,10000.0,2
-4,Andrea Stewart Cousins,Political Action Committee (Pac),Bricklayers And Allied Craftworkers Pac,6000.0,2
-4,Andrea Stewart Cousins,Political Action Committee (Pac),Nysfda Pac | Nysfda-Pac,6000.0,2
-4,Andrea Stewart Cousins,Individual,Daniel Choi,6000.0,2
-4,Andrea Stewart Cousins,Political Action Committee (Pac),Int Brotherhood Of Teamsters 456 ...Pac,6000.0,2
-4,Andrea Stewart Cousins,Individual,Lucy Waletzky,6000.0,2
-5,Anthony Merante,Individual,Robert Marien,1500.0,2
-5,Anthony Merante,Individual,Francine E Weston,1000.0,4
-5,Anthony Merante,Nan,Hudson Group Of Westchester Inc,1000.0,1
-5,Anthony Merante,Political Committee,Friends Of Rob Astorino,1000.0,1
-5,Anthony Merante,Individual,Giovanni Salza,1000.0,1
-5,Anthony Merante,Individual,Joseph Royce,1000.0,1
-5,Anthony Merante,Individual,Jean Marien,1000.0,2
-5,Anthony Merante,Individual,Brandon Neider,1000.0,3
-5,Anthony Merante,Individual,Anthony Salza,1000.0,1
-5,Anthony Merante,Individual,Karen Celio,900.0,4
-6,Frank Jereis,Individual,Sana Sayegh,3250.0,2
-6,Frank Jereis,Individual,Jared Levine,3000.0,1
-6,Frank Jereis,Nan,International Brotherhood Of Teamsters L,3000.0,1
-6,Frank Jereis,Individual,Ammir Rabadi,3000.0,1
-6,Frank Jereis,Individual,Ariq Rabadi,3000.0,1
-6,Frank Jereis,Individual,John Zaremba,3000.0,1
-6,Frank Jereis,Individual,Christine Soifer,3000.0,1
-6,Frank Jereis,Nan,Wjm Development Corp,3000.0,1
-6,Frank Jereis,Individual,Evan Sacks,3000.0,1
-6,Frank Jereis,Individual,Joseph Romano,3000.0,1
-7,Jeannette Garcia,Political Action Committee (Pac),Hispanic Democrats Of Westchester,1500.0,1
-7,Jeannette Garcia,Individual,Kirsten Foy,1000.0,1
-7,Jeannette Garcia,Individual,Nathalia Fernandez,650.0,2
-7,Jeannette Garcia,Individual,Artemis Diaz,550.0,1
-7,Jeannette Garcia,Individual,Barry Nesson,500.0,1
-7,Jeannette Garcia,Individual,Carlos Perez Fernandez,500.0,5
-7,Jeannette Garcia,Individual,Diego J Loinaz Martin,500.0,1
-7,Jeannette Garcia,Individual,Amanda Septimo,500.0,1
-7,Jeannette Garcia,Individual,Maria Kercado,500.0,2
-7,Jeannette Garcia,Individual,Mimi Henriquez,500.0,1
-8,John Isaac,Nan,Techonology Innovation,895.0,1
-8,John Isaac,Individual,Vincent Aceste,500.0,1
-8,John Isaac,Candidate Family Member,Alisha Isaac,350.0,1
-8,John Isaac,Individual,Nancy Magliari,300.0,3
-8,John Isaac,Individual,Hari Singh,260.0,1
-8,John Isaac,Candidate Family Member,Josh Isaac,260.0,1
-8,John Isaac,Individual,Bimla Singh,250.0,1
-8,John Isaac,Individual,Harry Singh,250.0,1
-8,John Isaac,Individual,Anthony Merante,250.0,1
-8,John Isaac,Individual,Aleyamma Vinoi,250.0,1
+1,Anthony Nicodemo (D),(Unknown),,3233.0,2
+1,Anthony Nicodemo (D),Individual,David Hochberg,1000.0,1
+1,Anthony Nicodemo (D),Political Committee,Manion For New York,500.0,1
+1,Anthony Nicodemo (D),Individual,Kathleen Behrens,500.0,1
+1,Anthony Nicodemo (D),Individual,Edward Clark,500.0,1
+1,Anthony Nicodemo (D),Individual,John Rapaport,500.0,1
+1,Anthony Nicodemo (D),Individual,John Marino,500.0,1
+1,Anthony Nicodemo (D),Individual,Martin Ginsburg,500.0,1
+1,Anthony Nicodemo (D),Individual,William Harrington,500.0,1
+1,Anthony Nicodemo (D),(Unknown),Yonkers Democratic Committee,500.0,2
+2,Leslye Oquendo-Thomas (D),Candidate/Candidate Spouse,Leslye Oquendo-Thomas,2000.0,2
+2,Leslye Oquendo-Thomas (D),Candidate Family Member,Margarita Santiago,1000.0,2
+2,Leslye Oquendo-Thomas (D),Political Committee,Hispanic Democrats Of Westchester,1000.0,1
+2,Leslye Oquendo-Thomas (D),Individual,Alexandra Leighton,1000.0,1
+2,Leslye Oquendo-Thomas (D),Individual,Shirley Thomas,1000.0,1
+2,Leslye Oquendo-Thomas (D),Individual,Eulyn Douglas,800.0,1
+2,Leslye Oquendo-Thomas (D),(Unknown),,722.0,3
+2,Leslye Oquendo-Thomas (D),Individual,Eileen Conner,500.0,1
+2,Leslye Oquendo-Thomas (D),Individual,Philip Armstrong,500.0,1
+2,Leslye Oquendo-Thomas (D),Individual,Caroline Stern,400.0,1
+3,Wilson Terrero (D),"Partnership, Including Llps",M.S.Y. Group Inc.,1500.0,1
+3,Wilson Terrero (D),(Unknown),C.P.Y. Realty Group,1500.0,1
+3,Wilson Terrero (D),Individual,Nicholas S Capano,1000.0,2
+3,Wilson Terrero (D),Individual,Ammir S Rabadi,1000.0,2
+3,Wilson Terrero (D),Individual,Rafael Almonte,800.0,2
+3,Wilson Terrero (D),Individual,Marco A Rodriguez,700.0,3
+3,Wilson Terrero (D),Individual,John H Breheny,601.0,2
+3,Wilson Terrero (D),Individual,Francisco A Lopez,500.0,1
+3,Wilson Terrero (D),Individual,Luis A Muniz Jr,500.0,2
+3,Wilson Terrero (D),Candidate Family Member,Maria Terrero,500.0,1
+4,Andrea Stewart-Cousins (D),Political Action Committee (PAC) | Political Committee,Construction Industry Council Nys Pac,11000.0,3
+4,Andrea Stewart-Cousins (D),Union,Ny Administrative Employees Cwa Local,10000.0,2
+4,Andrea Stewart-Cousins (D),Individual,Sean Mccance,10000.0,2
+4,Andrea Stewart-Cousins (D),Political Action Committee (PAC),Nasrcc Political Education Committee,10000.0,2
+4,Andrea Stewart-Cousins (D),(Unknown),Geico,10000.0,2
+4,Andrea Stewart-Cousins (D),Political Action Committee (PAC),Bricklayers And Allied Craftworkers Pac,6000.0,2
+4,Andrea Stewart-Cousins (D),Political Action Committee (PAC),Nysfda Pac | Nysfda-Pac,6000.0,2
+4,Andrea Stewart-Cousins (D),Individual,Daniel Choi,6000.0,2
+4,Andrea Stewart-Cousins (D),Political Action Committee (PAC),Int Brotherhood Of Teamsters 456 ...Pac,6000.0,2
+4,Andrea Stewart-Cousins (D),Individual,Lucy Waletzky,6000.0,2
+5,Anthony Merante (R),Individual,Robert Marien,1500.0,2
+5,Anthony Merante (R),Individual,Francine E Weston,1000.0,4
+5,Anthony Merante (R),(Unknown),Hudson Group Of Westchester Inc,1000.0,1
+5,Anthony Merante (R),Political Committee,Friends Of Rob Astorino,1000.0,1
+5,Anthony Merante (R),Individual,Giovanni Salza,1000.0,1
+5,Anthony Merante (R),Individual,Joseph Royce,1000.0,1
+5,Anthony Merante (R),Individual,Jean Marien,1000.0,2
+5,Anthony Merante (R),Individual,Brandon Neider,1000.0,3
+5,Anthony Merante (R),Individual,Anthony Salza,1000.0,1
+5,Anthony Merante (R),Individual,Karen Celio,900.0,4
+6,Frank Jereis (D),Individual,Sana Sayegh,3250.0,2
+6,Frank Jereis (D),Individual,Jared Levine,3000.0,1
+6,Frank Jereis (D),(Unknown),International Brotherhood Of Teamsters L,3000.0,1
+6,Frank Jereis (D),Individual,Ammir Rabadi,3000.0,1
+6,Frank Jereis (D),Individual,Ariq Rabadi,3000.0,1
+6,Frank Jereis (D),Individual,John Zaremba,3000.0,1
+6,Frank Jereis (D),Individual,Christine Soifer,3000.0,1
+6,Frank Jereis (D),(Unknown),Wjm Development Corp,3000.0,1
+6,Frank Jereis (D),Individual,Evan Sacks,3000.0,1
+6,Frank Jereis (D),Individual,Joseph Romano,3000.0,1
+7,Jeannette Garcia (D),Political Action Committee (PAC),Hispanic Democrats Of Westchester,1500.0,1
+7,Jeannette Garcia (D),Individual,Kirsten Foy,1000.0,1
+7,Jeannette Garcia (D),Individual,Nathalia Fernandez,650.0,2
+7,Jeannette Garcia (D),Individual,Artemis Diaz,550.0,1
+7,Jeannette Garcia (D),Individual,Barry Nesson,500.0,1
+7,Jeannette Garcia (D),Individual,Carlos Perez Fernandez,500.0,5
+7,Jeannette Garcia (D),Individual,Diego J Loinaz Martin,500.0,1
+7,Jeannette Garcia (D),Individual,Amanda Septimo,500.0,1
+7,Jeannette Garcia (D),Individual,Maria Kercado,500.0,2
+7,Jeannette Garcia (D),Individual,Mimi Henriquez,500.0,1
+8,John Isaac (R),(Unknown),Techonology Innovation,895.0,1
+8,John Isaac (R),Individual,Vincent Aceste,500.0,1
+8,John Isaac (R),Candidate Family Member,Alisha Isaac,350.0,1
+8,John Isaac (R),Individual,Nancy Magliari,300.0,3
+8,John Isaac (R),Individual,Hari Singh,260.0,1
+8,John Isaac (R),Candidate Family Member,Josh Isaac,260.0,1
+8,John Isaac (R),Individual,Bimla Singh,250.0,1
+8,John Isaac (R),Individual,Harry Singh,250.0,1
+8,John Isaac (R),Individual,Anthony Merante,250.0,1
+8,John Isaac (R),Individual,Aleyamma Vinoi,250.0,1
