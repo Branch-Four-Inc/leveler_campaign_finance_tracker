@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yonkers Campaign Finance Tracker</title>
+<title>The Leveler News: Campaign Finance Tracker</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; display: flex; height: 100vh; overflow: hidden; }
@@ -150,7 +150,7 @@
 <!-- Sidebar / Drawer -->
 <div id="sidebar">
   <div class="sidebar-header">
-    <div class="sidebar-cycle">Yonkers, NY · 2026 Cycle</div>
+    <div class="sidebar-cycle">Created by Branch Four Inc.</div>
     <div class="sidebar-title">Campaign<br>Finance Tracker</div>
   </div>
   <div id="sidebar-summary-nav">
@@ -271,7 +271,7 @@ function renderSummary() {
   const numRaces = Object.keys(byRace).length;
   document.getElementById('summary').innerHTML = `
     <h2>Summary</h2>
-    <div class="page-sub">All candidates grouped by election</div>
+    <div class="page-sub">Data Updated: 2026-06-07</div>
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-label">Total Raised</div><div class="stat-value">${fmt(grandTotal)}</div><div class="stat-sub">All candidates</div></div>
       <div class="stat-card"><div class="stat-label">Candidates</div><div class="stat-value">${totals.length}</div></div>
