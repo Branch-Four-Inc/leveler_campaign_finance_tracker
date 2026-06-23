@@ -9,7 +9,7 @@
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f3f4f6; color: #111827; display: flex; height: 100vh; overflow: hidden; }
 
   /* ── Sidebar ── */
-  #sidebar { width: 220px; min-width: 220px; background: #fff; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; padding: 24px 0; transition: transform .25s; overflow-y: auto; }
+  #sidebar { width: 220px; min-width: 220px; background: #fff; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; padding: 24px 0 0; transition: transform .25s; overflow-y: auto; }
   .sidebar-header { padding: 0 20px 24px; border-bottom: 1px solid #e5e7eb; }
   .sidebar-cycle { font-size: 11px; color: #9ca3af; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
   .sidebar-title { font-size: 17px; font-weight: 700; line-height: 1.3; color: #111827; }
@@ -166,6 +166,7 @@
       <a data-tab="top"><span class="icon">▲</span> Top Contributors</a>
     </nav>
   </div>
+  <div id="sidebar-source" style="padding: 16px 20px; margin-top: auto; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; display: none;"></div>
 </div>
 
 <div id="main">
@@ -205,8 +206,7 @@ function closeDrawer() { sidebar.classList.remove('open'); overlay.classList.rem
 document.getElementById('menu-btn').addEventListener('click', openDrawer);
 overlay.addEventListener('click', closeDrawer);
 
-// Open sidebar by default on mobile
-if (window.innerWidth <= 640) openDrawer();
+
 
 // close drawer on nav item click (mobile)
 sidebar.addEventListener('click', e => {
@@ -218,8 +218,20 @@ let DATA = {};
 
 async function loadAll() {
   const files = ['total_contributions','contributor_types','pac_contributors','corporate_contributors','top_contributors'];
-  const results = await Promise.all(files.map(f => fetch(`data_output/${f}.csv`).then(r => r.text())));
+  const [paramsText, ...results] = await Promise.all([
+    fetch('data_output/parameters.csv').then(r => r.text()),
+    ...files.map(f => fetch(`data_output/${f}.csv`).then(r => r.text()))
+  ]);
   files.forEach((f, i) => DATA[f] = parseCSV(results[i]));
+
+  const params = parseCSV(paramsText)[0];
+  DATA.params = params;
+
+  document.title = `${params['Newsroom']}: Campaign Finance Tracker`;
+  const sourceEl = document.getElementById('sidebar-source');
+  sourceEl.textContent = `Data sourced from ${params['State']} State Board of Elections.`;
+  sourceEl.style.display = 'block';
+
   renderSummary();
 }
 
@@ -267,7 +279,7 @@ function renderSummary() {
   const numRaces = Object.keys(byRace).length;
   document.getElementById('summary').innerHTML = `
     <h2>Summary</h2>
-    <div class="page-sub">Data Updated: 2026-06-06</div>
+    <div class="page-sub">Data Updated: ${DATA.params['Data End']}</div>
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-label">Total Raised</div><div class="stat-value">${fmt(grandTotal)}</div><div class="stat-sub">All candidates</div></div>
       <div class="stat-card"><div class="stat-label">Candidates</div><div class="stat-value">${totals.length}</div></div>
