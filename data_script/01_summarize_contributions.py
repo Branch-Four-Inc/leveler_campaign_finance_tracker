@@ -1,7 +1,8 @@
 import argparse
+#from email import parser
 import pandas as pd
 import os 
-
+import re
 
 def clean_amount(series):
     return (
@@ -13,14 +14,70 @@ def clean_amount(series):
     )
 
 
-def clean_donor_name(series):
-    return (
-        series.astype(str)
-        .str.strip()
+#def clean_donor_name(series):
+#    return (
+#        series.astype(str)
+#        .str.strip()
+#        .str.lower()
+#        .str.replace(r"[^\w\s]", "", regex=True)
+#        .str.replace(r"\s+", "", regex=True)
+#    )
+
+def clean_donor_name(name_series, contributor_type_series):
+    cleaned = name_series.astype(str).str.strip()
+
+    # Only remove middle names for Individuals
+    is_individual = contributor_type_series.eq("Individual")
+
+    def remove_middle(name): ###Middle names are removed to avoid duplicates in the data. For example, "John A. Smith" and "John B. Smith" will be treated as the same contributor. Stella Mach check
+        parts = name.split()
+        if len(parts) >= 3:
+            return f"{parts[0]} {parts[-1]}"
+        return name
+
+    cleaned.loc[is_individual] = cleaned.loc[is_individual].apply(remove_middle)
+
+    # Standardize names
+    cleaned = (
+        cleaned
         .str.lower()
         .str.replace(r"[^\w\s]", "", regex=True)
         .str.replace(r"\s+", "", regex=True)
     )
+
+    return cleaned
+def find_doctors(df): #No doctor names found in data Stella Mach check
+    """
+    Return all individual contributors whose names start with
+    Dr or Dr.
+    """
+    doctors = df[
+        (df["Contributor Type"] == "Individual") &
+        (
+            df["Contributor Name"]
+            .str.contains(r"^\s*dr\.?\s", flags=re.IGNORECASE, regex=True, na=False)
+        )
+    ]
+
+    return doctors
+
+##Check for contributors that have the same cleaned name but are not merged because they differ by city and/or candidate Stella Mach check
+def find_unmerged_same_name_contributors(donor_summary):
+    """
+    Shows contributors that still appear as multiple rows in donor_summary
+    with the same cleaned name.
+
+    This helps identify contributors that were not merged because they differ
+    by city and/or candidate.
+    """
+
+    repeated_names = (
+        donor_summary.groupby("Contributor Name_clean")
+        .filter(lambda g: len(g) > 1)
+        .sort_values(["Contributor Name_clean", "Candidate"])
+    )
+
+    return repeated_names
 
 def round_amount(amount):
     
@@ -33,14 +90,21 @@ def main(input_dir: str,
          contribution_end: str, 
          newsroom: str, 
          file_format = 'csv'): 
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("input_dir")
+    parser.add_argument("output_dir")
+    parser.add_argument("contribution_start")
+    parser.add_argument("contribution_end")
+    parser.add_argument("newsroom")
+    parser.add_argument("file_format")
+    #input_dir = '../raw_contributions/'
+    #output_dir = '../data_output/'
+    #contribution_start = "2024-11-09"
+    #contribution_end = "2026-06-06"
+    #newsroom = 'The Leveler News'
     
-    input_dir = 'C:\\Users\\stm4z\OneDrive - branchfour.org\\Local Data Lab\\The Leveler\\election_finances\\raw_contributions'
-    output_dir = 'C:\\Users\\stm4z\OneDrive - branchfour.org\\Local Data Lab\\Repositories\\leveler_campaign_finance_tracker\\data_output'
-    contribution_start = "2024-11-09"
-    contribution_end = "2026-06-06"
-    newsroom = 'The Leveler News'
-    
-    file_names = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
+    file_names = [f for f in os.listdir(args.input_dir) if os.path.isfile(os.path.join(args.input_dir, f))]
     
     file_format = "csv"
     
@@ -67,7 +131,7 @@ def main(input_dir: str,
         party = file_names[i][breaks[4] + 1 : len(file_names[i]) - (len(file_format) +1) ] 
         
         # save candidate info to df 
-        temp_df = pd.read_csv(input_dir + '\\' + file_names[i], index_col=False, engine="python")
+        temp_df = pd.read_csv(input_dir + file_names[i], index_col=False, engine="python")
         temp_df['Candidate'] = candidate_name + f' ({party})'
         temp_df['Pull_date'] = pull_date
         temp_df['State'] = state
@@ -135,14 +199,36 @@ def main(input_dir: str,
     df2["Contributor Type"] = df2["Contributor Type"].str.replace("Pac", "PAC")
     
     # clean contributor name 
-    df2["Contributor Name_clean"] = clean_donor_name(df2["Contributor Name"])
+    #df2["Contributor Name_clean"] = clean_donor_name(df2["Contributor Name"])
     
+    df2["Contributor Name_clean"] = clean_donor_name(
+    df2["Contributor Name"],
+    df2["Contributor Type"]
+    )
+    doctor_df = find_doctors(df2)
+
+    print(doctor_df[[
+    "Contributor Name",
+    "Contributor Type",
+    "Amount"
+    ]])
+
     df2["Contributor Name"] = df2["Contributor Name"].str.strip().str.title()
     
+    df2["Contributor City_clean"] = (
+        df2["Contributor City"]
+        .astype(str)
+        .str.strip()
+        .str.lower()
+        .str.replace(r"[^\w\s]", "", regex=True)  # remove punctuation
+        .str.replace(r"\s+", "", regex=True)      # remove whitespace
+    )
+
+
     # make LLC and LLPs uppercase
     df2["Contributor Name"] = df2["Contributor Name"].str.replace("Llp", "LLP")
     df2["Contributor Name"] = df2["Contributor Name"].str.replace("Llc", "LLC")
-    
+   
     # should group contributor by name and address to when calculating total amount (some people with same name could be grouped together)
     # need to clean addresses then (cir -> circle, ave -> avenue, apartment numbers, etc.)
     # drop people's middle initials? 
@@ -185,29 +271,114 @@ def main(input_dir: str,
 
     
     # top contributors
-    donor_summary = (
-    df2.groupby(["CandidateID", "Candidate", "Contributor Name_clean"], dropna=False)
-    .agg(
-        **{             "Contributor Type": pd.NamedAgg(column="Contributor Type", aggfunc=lambda x: " | ".join(
-                     pd.Series(x.dropna().astype(str).unique()).sort_values()  
-                ) ), 
-             "Contributor Name": pd.NamedAgg(column="Contributor Name", aggfunc=lambda x: " | ".join(
-             pd.Series(x.dropna().astype(str).unique()).sort_values()  
-
-        ) ), 
-             "Total Contributions": pd.NamedAgg(column="Amount", aggfunc="sum"), 
-             "Number of Contributions": pd.NamedAgg(column="Amount", aggfunc="count")
-
-        }
+#    donor_summary = (
+#    df2.groupby(["CandidateID", "Candidate", "Contributor Name_clean"], dropna=False)
+#    .agg(
+#        **{             "Contributor Type": pd.NamedAgg(column="Contributor Type", aggfunc=lambda x: " | ".join(
+#                     pd.Series(x.dropna().astype(str).unique()).sort_values()  
+#                ) ), 
+#             "Contributor Name": pd.NamedAgg(column="Contributor Name", aggfunc=lambda x: " | ".join(
+#             pd.Series(x.dropna().astype(str).unique()).sort_values()  
+#
+#        ) ), 
+#             "Total Contributions": pd.NamedAgg(column="Amount", aggfunc="sum"), 
+#             "Number of Contributions": pd.NamedAgg(column="Amount", aggfunc="count")
+#
+#        }
+#    )
+#    .sort_values("Total Contributions", ascending=False)
+#    .groupby(["CandidateID", "Candidate"], group_keys=False)
+#    .apply(lambda g: g.nlargest(10, "Total Contributions"))
+#).reset_index(drop = False).drop(columns = ["Contributor Name_clean"], axis = 0)
+#    
+#    donor_summary['Total Contributions'] = round_amount(donor_summary['Total Contributions'] )
+    # Mapping of merged contributors Stella Mach check
+    merged_contributor_mapping = (
+        df2.groupby(
+            [
+                "CandidateID",
+                "Candidate",
+                "Contributor Name_clean",
+                "Contributor City_clean",
+            ],
+            dropna=False,
+        )
+        .agg(
+            **{
+                "Merged Contributor Name": pd.NamedAgg(
+                    column="Contributor Name",
+                    aggfunc=lambda x: " | ".join(
+                        sorted(pd.Series(x.dropna().astype(str).unique()))
+                    ),
+                ),
+                "Contributor City": pd.NamedAgg(
+                    column="Contributor City",
+                    aggfunc=lambda x: " | ".join(
+                        sorted(pd.Series(x.dropna().astype(str).unique()))
+                    ),
+                ),
+                "Contributor Address": pd.NamedAgg(
+                    column="Contributor Address",
+                    aggfunc=lambda x: " | ".join(
+                        sorted(pd.Series(x.dropna().astype(str).unique()))
+                    ),
+                ),
+                "Contributor Type": pd.NamedAgg(
+                    column="Contributor Type",
+                    aggfunc=lambda x: " | ".join(
+                        sorted(pd.Series(x.dropna().astype(str).unique()))
+                    ),
+                ),
+                "Total Contributions": pd.NamedAgg(
+                    column="Amount",
+                    aggfunc="sum",
+                ),
+                "Number of Contributions": pd.NamedAgg(
+                    column="Amount",
+                    aggfunc="count",
+                ),
+            }
+        )
+        .reset_index()
     )
-    .sort_values("Total Contributions", ascending=False)
-    .groupby(["CandidateID", "Candidate"], group_keys=False)
-    .apply(lambda g: g.nlargest(10, "Total Contributions"))
-).reset_index(drop = False).drop(columns = ["Contributor Name_clean"], axis = 0)
     
-    donor_summary['Total Contributions'] = round_amount(donor_summary['Total Contributions'] )
-    
-    
+
+
+    # top contributors grouped by cleaned name and cleaned city
+    donor_summary = (
+        df2.groupby(
+            ["CandidateID", "Candidate", "Contributor Name_clean", "Contributor City_clean"],###City included to make contributors specific based on location even if they have same names
+            dropna=False
+        )
+        .agg(
+            **{
+                "Contributor Type": pd.NamedAgg(
+                    column="Contributor Type",
+                    aggfunc=lambda x: " | ".join(
+                        pd.Series(x.dropna().astype(str).unique()).sort_values()
+                    )
+                ),
+                "Contributor Name": pd.NamedAgg(
+                    column="Contributor Name",
+                    aggfunc=lambda x: " | ".join(
+                        pd.Series(x.dropna().astype(str).unique()).sort_values()
+                    )
+                ),
+               
+                "Total Contributions": pd.NamedAgg(column="Amount", aggfunc="sum"),
+                "Number of Contributions": pd.NamedAgg(column="Amount", aggfunc="count"),
+                }
+        )
+        .sort_values("Total Contributions", ascending=False)
+        .groupby(["CandidateID", "Candidate"], group_keys=False)
+        .apply(lambda g: g.nlargest(10, "Total Contributions"))
+        .reset_index(drop=False)
+        .drop(columns=["Contributor City_clean"])
+    )
+
+    donor_summary["Total Contributions"] = round_amount(
+        donor_summary["Total Contributions"]
+    )
     
     # pac contributors
     pacs = df2[df2['Contributor Type'].str.strip().str.lower().str.contains("pac|political action committee")]
@@ -241,15 +412,25 @@ def main(input_dir: str,
                   'Data Start': contribution_start, 
                   'Data End': contribution_end}, index = [0])
     
-
-
+    
     # export csvs
-    summary.to_csv(output_dir + '\\' + 'total_contributions.csv', index = False)
-    contrib_summary.to_csv(output_dir + '\\' + 'contributor_types.csv', index = False)
-    donor_summary.to_csv(output_dir + '\\' + 'top_contributors.csv', index = False)
-    pacs_summary.to_csv(output_dir + '\\' + 'pac_contributors.csv', index = False)
-    corporates_summary.to_csv(output_dir + '\\' + 'corporate_contributors.csv', index = False)
-    parameters.to_csv(output_dir + '\\' + 'parameters.csv', index = False)
+
+    unmerged_same_names = find_unmerged_same_name_contributors(donor_summary)
+    unmerged_same_names.to_csv(
+    os.path.join(output_dir, "unmerged_same_name_contributors.csv"),
+    index=False
+    )
+    merged_contributor_mapping.to_csv(
+    os.path.join(output_dir, "merged_contributor_mapping.csv"),
+    index=False,
+    )
+
+    summary.to_csv(output_dir + '/' + 'total_contributions.csv', index = False)
+    contrib_summary.to_csv(output_dir + '/' + 'contributor_types.csv', index = False)
+    donor_summary.to_csv(output_dir + '/' + 'top_contributors.csv', index = False)
+    pacs_summary.to_csv(output_dir + '/' + 'pac_contributors.csv', index = False)
+    corporates_summary.to_csv(output_dir + '/' + 'corporate_contributors.csv', index = False)
+    parameters.to_csv(output_dir + '/' + 'parameters.csv', index = False)
 
 
 #donor_summary.to_csv("donors_over_3000_summary.csv", index=False)
@@ -257,11 +438,21 @@ def main(input_dir: str,
 
 
 if __name__ == "__main__":
+    #parser = argparse.ArgumentParser()
+    #parser.add_argument(
+    #    "input_dir","output_dir", "contribution_start", "contribution_end","file_formet",
+    #    help="Input CSV file, e.g. Contributions_anthony_merante.csv"
+    #)
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "input_dir","output_dir", "contribution_start", "contribution_end","file_formet",
-        help="Input CSV file, e.g. Contributions_anthony_merante.csv"
-    )
+
+    parser.add_argument("input_dir")
+    parser.add_argument("output_dir")
+    parser.add_argument("contribution_start")
+    parser.add_argument("contribution_end")
+    parser.add_argument("newsroom")
+    parser.add_argument("file_format", nargs="?", default="csv")
+
     args = parser.parse_args()
+
 
     main(args.input_dir, args.output_dir, args.contribution_start, args.contribution_end, args.newsroom, args.file_format)
