@@ -1,4 +1,4 @@
-CandidateID,Candidate,Contributor State_clean,Amount
+CandidateID,Candidate,State,Amount
 1,Anthony Nicodemo (D),CA,100.0
 1,Anthony Nicodemo (D),CT,250.0
 1,Anthony Nicodemo (D),FL,350.0
