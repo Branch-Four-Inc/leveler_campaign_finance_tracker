@@ -1,4 +1,4 @@
-CandidateID,Candidate,state_group,Amount
+CandidateID,Candidate,Contributor Location,Amount
 1,Anthony Nicodemo (D),In-state,20927.0
 1,Anthony Nicodemo (D),Out-of-state,1350.0
 1,Anthony Nicodemo (D),Undisclosed,3483.26
