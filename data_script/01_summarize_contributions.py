@@ -3,6 +3,7 @@ import argparse
 import pandas as pd
 import os 
 import re
+import numpy as np 
 
 def clean_amount(series):
     return (
@@ -55,7 +56,9 @@ def find_doctors(df): #No doctor names found in data Stella Mach check
         (df["Contributor Type"] == "Individual") &
         (
             df["Contributor Name"]
-            .str.contains(r"^\s*dr\.?\s", flags=re.IGNORECASE, regex=True, na=False)
+            #.str.contains(r"^\s*dr\.?\s", flags=re.IGNORECASE, regex=True, na=False)
+            #.str.contains(r"^\s*dr[.\s]", flags=re.IGNORECASE, regex=True, na=False) 
+            .str.contains(r"^\s*dr\.?\b", flags=re.IGNORECASE, regex=True, na=False)
         )
     ]
 
@@ -98,11 +101,12 @@ def main(input_dir: str,
     parser.add_argument("contribution_end")
     parser.add_argument("newsroom")
     parser.add_argument("file_format")
-    #input_dir = '../raw_contributions/'
-    #output_dir = '../data_output/'
-    #contribution_start = "2024-11-09"
-    #contribution_end = "2026-06-06"
-    #newsroom = 'The Leveler News'
+    
+    input_dir = '../raw_contributions/'
+    output_dir = '../data_output/'
+    contribution_start = "2024-11-09"
+    contribution_end = "2026-06-06"
+    newsroom = 'The Leveler News'
     
     file_names = [f for f in os.listdir(args.input_dir) if os.path.isfile(os.path.join(args.input_dir, f))]
     
@@ -151,7 +155,9 @@ def main(input_dir: str,
     # drop duplicates 
     #df = df.drop_duplicates()
     
-    # base table of candidate info
+    # ----------------------------------------------
+    # CANDIDATE INFO TABLE
+    # ----------------------------------------------
     df.loc[:, ["Candidate", 'State', 'Location', 'Office']] = df.loc[:, ["Candidate", 'State', 'Location', 'Office']].apply(lambda x: x.str.strip().str.title())
     
     df['Location'] = df['Location'].str.replace("Th ", "th ")
@@ -171,6 +177,8 @@ def main(input_dir: str,
     # create CandidateID column
     candidate_info['CandidateID'] = list(range(1, len(file_names) +1 ) )
     
+    
+    
     df2 = df.merge(candidate_info[['Candidate', 'CandidateID']], on = "Candidate", how = 'left')
     
     # clean and filter contribution dates
@@ -187,7 +195,7 @@ def main(input_dir: str,
     
     df2["Amount"] = clean_amount(df2["Amount"])
     
-    # fills blank Contributor Type with NA
+    # fills blank Contributor Type with Unknown
     df2["Contributor Type"] = (
         df2["Contributor Type"]
         .replace(r"^\s*$", pd.NA, regex=True)
@@ -205,6 +213,8 @@ def main(input_dir: str,
     df2["Contributor Name"],
     df2["Contributor Type"]
     )
+    
+    # remove Dr in names 
     doctor_df = find_doctors(df2)
 
     print(doctor_df[[
@@ -229,11 +239,6 @@ def main(input_dir: str,
     df2["Contributor Name"] = df2["Contributor Name"].str.replace("Llp", "LLP")
     df2["Contributor Name"] = df2["Contributor Name"].str.replace("Llc", "LLC")
    
-    # should group contributor by name and address to when calculating total amount (some people with same name could be grouped together)
-    # need to clean addresses then (cir -> circle, ave -> avenue, apartment numbers, etc.)
-    # drop people's middle initials? 
-    # drop "Dr "
-
 
     # total contributions
     summary = (
@@ -245,6 +250,7 @@ def main(input_dir: str,
     ) ).reset_index(drop = False)
     summary['Total Contributions'] = round_amount(summary['Total Contributions'] )
     
+    # ADD KISHA SKIPPER 
     summary = pd.concat([pd.DataFrame({'CandidateID': 9,
         'Candidate': 'Kisha Skipper (D)', 
                              'Location': '15th District', 
@@ -292,6 +298,8 @@ def main(input_dir: str,
 #).reset_index(drop = False).drop(columns = ["Contributor Name_clean"], axis = 0)
 #    
 #    donor_summary['Total Contributions'] = round_amount(donor_summary['Total Contributions'] )
+
+
     # Mapping of merged contributors Stella Mach check
     merged_contributor_mapping = (
         df2.groupby(
@@ -406,11 +414,88 @@ def main(input_dir: str,
     corporates_summary['Total Contributions'] = round_amount(corporates_summary['Total Contributions'] )
     
     
+    # ----------------------------------------------------------------
+    # STATE CONTRIBUTIONS
+    # ----------------------------------------------------------------
+    
+    states = {
+    "Alabama": "AL",
+    "Alaska": "AK",
+    "Arizona": "AZ",
+    "Arkansas": "AR",
+    "California": "CA",
+    "Colorado": "CO",
+    "Connecticut": "CT",
+    "Delaware": "DE",
+    "Florida": "FL",
+    "Georgia": "GA",
+    "Hawaii": "HI",
+    "Idaho": "ID",
+    "Illinois": "IL",
+    "Indiana": "IN",
+    "Iowa": "IA",
+    "Kansas": "KS",
+    "Kentucky": "KY",
+    "Louisiana": "LA",
+    "Maine": "ME",
+    "Maryland": "MD",
+    "Massachusetts": "MA",
+    "Michigan": "MI",
+    "Minnesota": "MN",
+    "Mississippi": "MS",
+    "Missouri": "MO",
+    "Montana": "MT",
+    "Nebraska": "NE",
+    "Nevada": "NV",
+    "New Hampshire": "NH",
+    "New Jersey": "NJ",
+    "New Mexico": "NM",
+    "New York": "NY",
+    "North Carolina": "NC",
+    "North Dakota": "ND",
+    "Ohio": "OH",
+    "Oklahoma": "OK",
+    "Oregon": "OR",
+    "Pennsylvania": "PA",
+    "Rhode Island": "RI",
+    "South Carolina": "SC",
+    "South Dakota": "SD",
+    "Tennessee": "TN",
+    "Texas": "TX",
+    "Utah": "UT",
+    "Vermont": "VT",
+    "Virginia": "VA",
+    "Washington": "WA",
+    "West Virginia": "WV",
+    "Wisconsin": "WI",
+    "Wyoming": "WY",
+    "District of Columbia": "DC",
+}
+    
+    
+    state_lookup = {k.lower(): v for k, v in states.items()}
+    
+    # for states names spelled out, match with state abbreviation. For those without state names, fill with contributor state 
+    df2['Contributor State_clean'] = df2["Contributor State"].str.strip().str.lower().map(state_lookup).fillna(df2["Contributor State"])
+    
+    df2['Contributor State_clean'] = df2['Contributor State_clean'].str.strip().str.lower()
+    
+    
+    df2['state_group'] = np.where(df2['Contributor State_clean'] ==state, "In-state", "Out-of-state")
+    df2['state_group']  = np.where(df2['Contributor State_clean'].isna()==True, "Undisclosed", df2['state_group'])
+ 
+    instate_contr = df2.groupby(['CandidateID', 'Candidate', 'state_group'])['Amount'].sum().reset_index(drop = False)
+    state_contr = df2.groupby(['CandidateID', 'Candidate', 'Contributor State_clean'])['Amount'].sum().reset_index(drop = False)
+    state_contr['Contributor State_clean'] = state_contr['Contributor State_clean'].str.upper()
+    state_contr = state_contr.rename({'Contributor State_clean': 'State'})
+    
+    
     # parmeters to show on UI
     parameters = pd.DataFrame({'Newsroom': newsroom,
                   'State': state.upper(), 
                   'Data Start': contribution_start, 
                   'Data End': contribution_end}, index = [0])
+    
     
     
     # export csvs
@@ -431,6 +516,8 @@ def main(input_dir: str,
     pacs_summary.to_csv(output_dir + '/' + 'pac_contributors.csv', index = False)
     corporates_summary.to_csv(output_dir + '/' + 'corporate_contributors.csv', index = False)
     parameters.to_csv(output_dir + '/' + 'parameters.csv', index = False)
+    instate_contr.to_csv(output_dir + '/' + 'instate_perc.csv', index = False)
+    state_contr.to_csv(output_dir + '/' + 'all_state_perc.csv', index = False)
 
 
 #donor_summary.to_csv("donors_over_3000_summary.csv", index=False)
