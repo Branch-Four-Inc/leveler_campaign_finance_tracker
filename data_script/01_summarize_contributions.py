@@ -481,13 +481,13 @@ def main(input_dir: str,
     df2['Contributor State_clean'] = df2['Contributor State_clean'].str.strip().str.lower()
     
     
-    df2['state_group'] = np.where(df2['Contributor State_clean'] ==state, "In-state", "Out-of-state")
-    df2['state_group']  = np.where(df2['Contributor State_clean'].isna()==True, "Undisclosed", df2['state_group'])
+    df2['Contributor Location'] = np.where(df2['Contributor State_clean'] ==state, "In-state", "Out-of-state")
+    df2['Contributor Location']  = np.where(df2['Contributor State_clean'].isna()==True, "Undisclosed", df2['state_group'])
  
-    instate_contr = df2.groupby(['CandidateID', 'Candidate', 'state_group'])['Amount'].sum().reset_index(drop = False)
+    instate_contr = df2.groupby(['CandidateID', 'Candidate', 'Contributor Location'])['Amount'].sum().reset_index(drop = False)
     state_contr = df2.groupby(['CandidateID', 'Candidate', 'Contributor State_clean'])['Amount'].sum().reset_index(drop = False)
     state_contr['Contributor State_clean'] = state_contr['Contributor State_clean'].str.upper()
-    state_contr = state_contr.rename({'Contributor State_clean': 'State'})
+    state_contr = state_contr.rename({'Contributor State_clean': 'State'}, axis = 1)
     
     
     # parmeters to show on UI
