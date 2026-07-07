@@ -130,7 +130,35 @@
     .data-table-header.cols-3 span:nth-child(2),
     .data-row.cols-3 > div:nth-child(2) { display: none; }
   }
+  /* ── Geography panel ── */
+  .geo-section { margin-bottom: 28px; }
+  .geo-section-title { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 14px; }
+
+  /* In/out-of-state slider */
+  .instate-bar-wrap { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; }
+  .instate-bar-track { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+  .instate-bar-seg { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; transition: width .4s; overflow: hidden; white-space: nowrap; }
+  .instate-legend { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .instate-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #374151; }
+  .instate-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .instate-legend-val { font-weight: 600; }
+
+  /* Map */
+  .geo-map-wrap { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px; }
+  .geo-map-legend { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .geo-map-legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #374151; }
+  .geo-map-legend-swatch { width: 16px; height: 16px; border-radius: 2px; flex-shrink: 0; }
+  #geo-svg { width: 100%; height: auto; display: block; }
+  #geo-svg path { stroke: #fff; stroke-width: 0.5; }
+  #geo-svg path:hover { opacity: .8; cursor: default; }
+  .geo-tooltip { position: fixed; background: #111827; color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 6px; pointer-events: none; white-space: nowrap; z-index: 100; display: none; }
+
+  @media (max-width: 640px) {
+    .instate-legend { gap: 12px; }
+  }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 </head>
 <body>
 
@@ -164,6 +192,7 @@
       <a data-tab="pac"><span class="icon">★</span> PAC Contributors</a>
       <a data-tab="corporate"><span class="icon">⬡</span> Corporate</a>
       <a data-tab="top"><span class="icon">▲</span> Top Contributors</a>
+      <a data-tab="geography"><span class="icon">⊕</span> Geography</a>
     </nav>
   </div>
   <div id="sidebar-source" style="padding: 16px 20px; margin-top: auto; font-size: 11px; color: #9ca3af; border-top: 1px solid #e5e7eb; display: none;"></div>
@@ -173,6 +202,8 @@
   <div id="summary" class="page active"></div>
   <div id="candidate-detail" class="page"></div>
 </div>
+
+<div id="geo-tooltip" class="geo-tooltip"></div>
 
 <script>
 const COLORS = ['#3b82f6','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
@@ -217,7 +248,7 @@ sidebar.addEventListener('click', e => {
 let DATA = {};
 
 async function loadAll() {
-  const files = ['total_contributions','contributor_types','pac_contributors','corporate_contributors','top_contributors'];
+  const files = ['total_contributions','contributor_types','pac_contributors','corporate_contributors','top_contributors','instate_perc','all_state_perc'];
   const [paramsText, ...results] = await Promise.all([
     fetch('data_output/parameters.csv').then(r => r.text()),
     ...files.map(f => fetch(`data_output/${f}.csv`).then(r => r.text()))
@@ -340,7 +371,10 @@ function renderCandidateDetail(id, name) {
     <div id="panel-contrib-types" class="detail-panel active">${renderContribTypes(types)}</div>
     <div id="panel-pac" class="detail-panel">${renderSimpleTable(pacs, ['Contributor Name','Total Contributions'])}</div>
     <div id="panel-corporate" class="detail-panel">${renderSimpleTable(corps, ['Contributor Name','Total Contributions'])}</div>
-    <div id="panel-top" class="detail-panel">${renderTopContribs(tops)}</div>`;
+    <div id="panel-top" class="detail-panel">${renderTopContribs(tops)}</div>
+    <div id="panel-geography" class="detail-panel"></div>`;
+
+  renderGeography(id, name);
 }
 
 function renderContribTypes(types) {
@@ -396,6 +430,185 @@ function renderTopContribs(rows) {
     <div class="data-table-header cols-3"><span>Name</span><span>Type</span><span>Amount</span></div>
     ${tableRows}
   </div>`;
+}
+
+// ── State abbreviation → FIPS lookup ──
+const ABBR_TO_FIPS = {
+  AL:'01',AK:'02',AZ:'04',AR:'05',CA:'06',CO:'08',CT:'09',DE:'10',DC:'11',FL:'12',
+  GA:'13',HI:'15',ID:'16',IL:'17',IN:'18',IA:'19',KS:'20',KY:'21',LA:'22',ME:'23',
+  MD:'24',MA:'25',MI:'26',MN:'27',MS:'28',MO:'29',MT:'30',NE:'31',NV:'32',NH:'33',
+  NJ:'34',NM:'35',NY:'36',NC:'37',ND:'38',OH:'39',OK:'40',OR:'41',PA:'42',RI:'44',
+  SC:'45',SD:'46',TN:'47',TX:'48',UT:'49',VT:'50',VA:'51',WA:'53',WV:'54',WI:'55',
+  WY:'56',PR:'72'
+};
+
+// Cache TopoJSON so we only fetch it once
+let _usTopoCache = null;
+async function getUSTopo() {
+  if (!_usTopoCache) {
+    _usTopoCache = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(r => r.json());
+  }
+  return _usTopoCache;
+}
+
+async function renderGeography(id, name) {
+  const panel = document.getElementById('panel-geography');
+  panel.innerHTML = '<div class="empty" style="padding:24px 0">Loading map…</div>';
+
+  // ── In/out-of-state slider ──
+  const instateRows = DATA.instate_perc.filter(r => r.CandidateID === id);
+  const byLoc = {};
+  instateRows.forEach(r => { byLoc[r['Contributor Location']] = +r.Amount || 0; });
+  const inAmt  = byLoc['In-state']    || 0;
+  const outAmt = byLoc['Out-of-state'] || 0;
+  const undAmt = byLoc['Undisclosed']  || 0;
+  const locTotal = inAmt + outAmt + undAmt;
+
+  const pctIn  = locTotal ? (inAmt  / locTotal * 100) : 0;
+  const pctOut = locTotal ? (outAmt / locTotal * 100) : 0;
+  const pctUnd = locTotal ? (undAmt / locTotal * 100) : 0;
+
+  const segStyle = (pct, color) =>
+    pct >= 5
+      ? `style="width:${pct.toFixed(1)}%;background:${color}"`
+      : `style="width:${pct.toFixed(1)}%;background:${color};font-size:0"`;
+
+  const sliderHTML = locTotal === 0
+    ? '<div class="empty">No location data available.</div>'
+    : `<div class="instate-bar-wrap">
+        <div class="instate-bar-track">
+          <div class="instate-bar-seg" ${segStyle(pctIn,  '#2563eb')}>${pctIn.toFixed(0)}%</div>
+          <div class="instate-bar-seg" ${segStyle(pctOut, '#10b981')}>${pctOut.toFixed(0)}%</div>
+          <div class="instate-bar-seg" ${segStyle(pctUnd, '#d1d5db')}>${pctUnd.toFixed(0)}%</div>
+        </div>
+        <div class="instate-legend">
+          <div class="instate-legend-item">
+            <div class="instate-legend-dot" style="background:#2563eb"></div>
+            In-state &nbsp;<span class="instate-legend-val">${fmt(inAmt)}</span>&nbsp;(${pctIn.toFixed(1)}%)
+          </div>
+          <div class="instate-legend-item">
+            <div class="instate-legend-dot" style="background:#10b981"></div>
+            Out-of-state &nbsp;<span class="instate-legend-val">${fmt(outAmt)}</span>&nbsp;(${pctOut.toFixed(1)}%)
+          </div>
+          ${undAmt > 0 ? `<div class="instate-legend-item">
+            <div class="instate-legend-dot" style="background:#d1d5db"></div>
+            Undisclosed &nbsp;<span class="instate-legend-val">${fmt(undAmt)}</span>&nbsp;(${pctUnd.toFixed(1)}%)
+          </div>` : ''}
+        </div>
+      </div>`;
+
+  // ── Choropleth map ──
+  const stateRows = DATA.all_state_perc.filter(r => r.CandidateID === id);
+  const byState = {};
+  stateRows.forEach(r => { byState[r.State] = +r.Amount || 0; });
+
+  const amounts = Object.values(byState).filter(v => v > 0);
+  const maxAmt  = amounts.length ? Math.max(...amounts) : 1;
+
+  // 5-step threshold based on max value
+  const step = maxAmt / 5;
+  const thresholds = [step, step*2, step*3, step*4];
+  const GREEN = ['#e8f5e9','#a5d6a7','#66bb6a','#43a047','#2e7d32'];
+  const GRAY  = '#f3f4f6';
+
+  const colorScale = (v) => {
+    if (!v) return GRAY;
+    for (let i = 0; i < thresholds.length; i++) {
+      if (v <= thresholds[i]) return GREEN[i];
+    }
+    return GREEN[4];
+  };
+
+  const legendHTML = GREEN.map((c, i) => `
+    <div class="geo-map-legend-item">
+      <div class="geo-map-legend-swatch" style="background:${c}"></div>
+      ${i === GREEN.length - 1
+        ? `&ge; ${fmt(thresholds[i-1])}`
+        : `${fmt(i === 0 ? 0 : thresholds[i-1])} – ${fmt(thresholds[i])}`}
+    </div>`).join('');
+
+  panel.innerHTML = `
+    <div class="geo-section">
+      <div class="geo-section-title">In-state vs. Out-of-state</div>
+      ${sliderHTML}
+    </div>
+    <div class="geo-section">
+      <div class="geo-section-title">Contributions by State</div>
+      <div class="geo-map-wrap">
+        <div class="geo-map-legend">${legendHTML}</div>
+        <svg id="geo-svg" viewBox="0 0 960 600"></svg>
+      </div>
+    </div>`;
+
+  // Draw map with D3
+  try {
+    const us = await getUSTopo();
+    const states = topojson.feature(us, us.objects.states);
+
+    // Build fips→amount map
+    const amtByFips = {};
+    Object.entries(byState).forEach(([abbr, amt]) => {
+      const fips = ABBR_TO_FIPS[abbr];
+      if (fips) amtByFips[fips] = amt;
+    });
+
+    // Reverse lookup FIPS→abbreviation for tooltip
+    const fipsToAbbr = {};
+    Object.entries(ABBR_TO_FIPS).forEach(([a, f]) => fipsToAbbr[f] = a);
+
+    // Use albersUsa — matches the us-atlas coordinate space exactly
+    const W = 960, H = 600;
+    const projection = d3.geoAlbersUsa().scale(1300).translate([W/2, H/2]);
+    const path = d3.geoPath().projection(projection);
+    const tip  = document.getElementById('geo-tooltip');
+
+    const svg = d3.select('#geo-svg')
+      .attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('width', '100%')
+      .attr('height', 'auto');
+
+    svg.selectAll('path')
+      .data(states.features)
+      .join('path')
+      .attr('d', path)
+      .attr('fill', d => {
+        const fips = String(d.id).padStart(2,'0');
+        return colorScale(amtByFips[fips] || 0);
+      })
+      .on('mousemove', function(event, d) {
+        const fips = String(d.id).padStart(2,'0');
+        const abbr = fipsToAbbr[fips] || '';
+        const amt  = amtByFips[fips]  || 0;
+        tip.style.display = 'block';
+        tip.style.left    = (event.clientX + 12) + 'px';
+        tip.style.top     = (event.clientY - 28) + 'px';
+        tip.textContent   = amt ? `${abbr}: ${fmt(amt)}` : `${abbr}: $0`;
+      })
+      .on('mouseleave', () => { tip.style.display = 'none'; });
+
+    // State abbreviation labels — only render if centroid is within the projection
+    svg.selectAll('text')
+      .data(states.features)
+      .join('text')
+      .each(function(d) {
+        const c = projection(d3.geoCentroid(d));
+        if (!c) { d3.select(this).remove(); return; }
+        d3.select(this)
+          .attr('x', c[0])
+          .attr('y', c[1])
+          .attr('text-anchor', 'middle')
+          .attr('dominant-baseline', 'central')
+          .attr('font-size', '8')
+          .attr('font-family', '-apple-system, BlinkMacSystemFont, sans-serif')
+          .attr('fill', '#374151')
+          .attr('pointer-events', 'none')
+          .text(fipsToAbbr[String(d.id).padStart(2,'0')] || '');
+      });
+  } catch(e) {
+    document.querySelector('#panel-geography .geo-map-wrap').insertAdjacentHTML(
+      'beforeend', '<div class="empty" style="margin-top:8px">Map unavailable (network error).</div>'
+    );
+  }
 }
 
 loadAll();
