@@ -47,6 +47,7 @@ def clean_donor_name(name_series, contributor_type_series):
     )
 
     return cleaned
+
 def find_doctors(df): #No doctor names found in data Stella Mach check
     """
     Return all individual contributors whose names start with
@@ -644,6 +645,7 @@ def main(input_dir: str,
     "Wisconsin": "WI",
     "Wyoming": "WY",
     "District of Columbia": "DC",
+    "Puerto Rico": "PR"
 }
     
     
