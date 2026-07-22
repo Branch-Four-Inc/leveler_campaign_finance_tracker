@@ -1,47 +1,40 @@
-# import argparse
-
-# from email import parser
 import pandas as pd
 from pathlib import Path
 from utils import round_amount, clean_amount
 
 
 
-def main(
-    # input_dir: str,
-    # output_dir: str,
-    # contribution_start: str,
-    # contribution_end: str,
-    # newsroom: str,
-    file_format="csv",
-):
-    # parser = argparse.ArgumentParser()
+def main(file_format="csv",):
 
-    # parser.add_argument("input_dir")
-    # parser.add_argument("output_dir")
-    # parser.add_argument("contribution_start")
-    # parser.add_argument("contribution_end")
-    # parser.add_argument("newsroom")
-    # parser.add_argument("file_format")
-
-    input_dir = Path("raw_contributions")
-    output_dir = Path("data_output")
-    candidate_info_dir = Path("candidate_info/candidate_info.tsv")
+    ############# CONFIG ##########################
+    county = "HUDSON COUNTY"
     contribution_start = "2020-01-01"
-    contribution_end = "2026-07-06"
     newsroom = "Slice of Culture"
-    pull_date = "2026-07-06"
+    pull_date = "2026-07-21"
+    contribution_end = pull_date
     state = "NJ"
+    ###############################################
 
+    input_dir = Path(f"raw_contributions/{county}")
+    output_dir = Path(f"data_output/{county}")
+    candidate_info_dir = input_dir / Path(f"candidates_{'_'.join(county.split(' '))}_2026.csv")
     file_names = input_dir.glob(f"*{file_format}")
 
     df_list = []
 
     # read in all files into one list
     for f in file_names:
-        temp_df = pd.read_csv(f, index_col=False)
-
-        df_list += [temp_df]
+        # read all files not including candidate info
+        if "candidates_" not in str(f):
+            try:
+                temp_df = pd.read_csv(f, index_col=False)
+                # Save EID from name of the file
+                temp_df["CandidateID"] = int(str(f).split("_contribution_detail")[0].split("_")[-1])
+                df_list += [temp_df]
+            except Exception as e:
+                # Most of these are issues with commas in names
+                # TODO fix the scraping code to remove these
+                raise ValueError(e)
 
     df = pd.concat(df_list, ignore_index=True)
     # Rename the candidate and Amount columns for clarity
@@ -52,30 +45,27 @@ def main(
     # ----------------------------------------------
 
     cand_info = pd.read_csv(
-        candidate_info_dir,
-        sep="\t",
-        usecols=["Name", "Office/Cmte", "Party", "Election Type"],
+        candidate_info_dir
     ).rename(
         columns={
-            "Name": "Candidate",
-            "Office/Cmte": "Office",
-            "Election Type": "Election",
+            "name": "Candidate",
+            "office_cmte": "Office",
+            "election_type": "Election",
+            "eid":"CandidateID",
+            "party": "Party",
         }
     ).drop_duplicates(["Candidate"]).sort_values(["Office", "Candidate"]).reset_index(drop=True)
 
-    # Add in ID column
-    cand_info["CandidateID"] = list(range(1, len(cand_info["Candidate"]) + 1))
-
-    df = pd.merge(df, cand_info, on="Candidate", how="left")
+    # There are multiple rows for the same candidate based on primary vs full election
+    df = pd.merge(df, cand_info, on=["CandidateID", "Candidate"], how="left")
 
     # ----------------------------------------------
     # ADD EXTRA COLUMNS, CLEAN STRINGS
     # ----------------------------------------------
 
     df["State"] = "New Jersey"
-    df["PullDate"] = (
-        pull_date  # hard-coded for now, as all data was pulled the same day
-    )
+    # hard-coded for now, as all data was pulled the same day
+    df["PullDate"] = pull_date
 
 
     # Clean up the values for candidates, individuals, location, etc.
@@ -261,6 +251,8 @@ def main(
     )
 
     # export csvs
+    output_dir.mkdir(exist_ok=True)
+
     summary.to_csv(output_dir / "total_contributions.csv", index=False)
     contrib_summary.to_csv(output_dir / "contributor_types.csv", index=False)
     donor_summary.to_csv(output_dir / "top_contributors.csv", index=False)
@@ -270,37 +262,6 @@ def main(
     )
     parameters.to_csv(output_dir / "parameters.csv", index=False)
 
-    # no address, so no state-grouped contributions
-    # instate_contr.to_csv(output_dir + "/" + "instate_perc.csv", index=False)
-    # state_contr.to_csv(output_dir + "/" + "all_state_perc.csv", index=False)
-
-
-# donor_summary.to_csv("donors_over_3000_summary.csv", index=False)
-# contrib_summary.to_csv("contributor_type_summary.csv")
-
 
 if __name__ == "__main__":
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument(
-    #    "input_dir","output_dir", "contribution_start", "contribution_end","file_formet",
-    #    help="Input CSV file, e.g. Contributions_anthony_merante.csv"
-    # )
-    # parser = argparse.ArgumentParser()
-
-    # parser.add_argument("input_dir")
-    # parser.add_argument("output_dir")
-    # parser.add_argument("contribution_start")
-    # parser.add_argument("contribution_end")
-    # parser.add_argument("newsroom")
-    # parser.add_argument("file_format", nargs="?", default="csv")
-
-    # args = parser.parse_args()
-
-    main(
-        # args.input_dir,
-        # args.output_dir,
-        # args.contribution_start,
-        # args.contribution_end,
-        # args.newsroom,
-        # args.file_format,
-    )
+    main()
