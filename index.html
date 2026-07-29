@@ -5,25 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Leveler News: Campaign Finance Tracker</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Gudea:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f3f4f6; color: #111827; display: flex; height: 100vh; overflow: hidden; }
+  body { font-family: -apple-system, "Montserrat", 'Gudea', sans-serif; background: #f3f4f6; color: #111827; display: flex; height: 100vh; overflow: hidden; }
 
   /* ── Sidebar ── */
-  #sidebar { width: 220px; min-width: 220px; background: #fff; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; padding: 24px 0 0; transition: transform .25s; overflow-y: auto; }
+  #sidebar { width: 220px; min-width: 220px; background: #16162a; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; padding: 24px 0 0; transition: transform .25s; overflow-y: auto; }
   .sidebar-header { padding: 0 20px 24px; border-bottom: 1px solid #e5e7eb; }
-  .sidebar-cycle { font-size: 11px; color: #9ca3af; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
-  .sidebar-title { font-size: 17px; font-weight: 700; line-height: 1.3; color: #111827; }
+  .sidebar-logo { width: 80px; height: auto; margin-bottom: 10px; display: block;}
+  .sidebar-flex {     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-evenly;}
+  .sidebar-cycle { font-size: 7px; color: #9ca3af; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 16px; }
+  .sidebar-title { font-family: "Playfair Display"; font-size: 17px; font-weight: 700; line-height: 1.3; color: #fcfcfc; }
   nav { padding: 16px 0; }
-  nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 14px; color: #6b7280; text-decoration: none; cursor: pointer; transition: background .15s; }
-  nav a:hover { background: #f3f4f6; color: #111827; }
-  nav a.active { background: #eff6ff; color: #1d4ed8; border-left: 3px solid #2563eb; }
-  nav a .icon { width: 16px; text-align: center; }
+  nav a { display: flex; align-items: center; gap: 10px; padding: 10px 20px; font-size: 16px; color: #6b7280; text-decoration: none; cursor: pointer; transition: background .15s; }
+  /*nav a:hover { background: #f3f4f6; color: #111827; }
+   nav a.active { background: #eff6ff; color: #1d4ed8; border-left: 3px solid #2563eb; } */
+   nav a.active { color: #d7ae6e}
+  nav a .icon { font-size: 22px; display: flex;
+    align-items: center;}
   .nav-back { padding: 10px 20px 0; }
-  .nav-back button { background: none; border: none; color: #9ca3af; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 0; }
-  .nav-back button:hover { color: #111827; }
+  .nav-back button { background: none; border: none; color: #9ca3af; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 10px; }
+  .nav-back button:hover { color: #d7ae6e; }
   .nav-section { padding: 8px 20px 4px; font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: .1em; }
+  .btn-grad { background-image: linear-gradient(to right, #372f59 0%, #17182b 51%, #17182b 100%);}
+  .btn-grad { margin: 10px; padding: 13px 56px; text-transform: uppercase; transition: 0.5s; background-size: 200% auto; border-radius: 9px; display: flex; outline: none; color: #fff; text-decoration: none; border: 1px solid transparent; background-image: linear-gradient(to right, #372f59 0%, #17182b 50%, #17182b 100%), linear-gradient(to right, #d7ae6e 0%, #17182b 40%, #17182b 100%); background-origin: border-box; background-clip: padding-box, border-box;}
+  .btn-grad:hover {  background-position: right center; color: #d7ae6e; }
 
-  /* ── Overlay (mobile) ── */
+
   #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 10; }
   #overlay.open { display: block; }
 
@@ -33,29 +46,82 @@
   #topbar-title { font-size: 15px; font-weight: 700; color: #111827; }
 
   /* ── Main ── */
-  #main { flex: 1; overflow-y: auto; padding: 32px 36px; }
+  #main { flex: 1; overflow-y: auto; padding: 32px 36px; background-color: #f8f7f7;}
   .page { display: none; }
   .page.active { display: block; }
 
   /* ── Summary ── */
-  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
-  .stat-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px 20px; }
-  .stat-label { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
-  .stat-value { font-size: 26px; font-weight: 700; color: #111827; }
-  .stat-sub { font-size: 12px; color: #9ca3af; margin-top: 4px; }
 
+  .stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  min-height: 145px;
+  padding: 28px 24px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(15,23,42,.05);
+}
+.stat-card:first-child{border-left:5px solid #d4a64a;}
+.stat-icon{
+ width:62px;height:62px;border-radius:50%;
+ display:flex;align-items:center;justify-content:center;
+ color:white;font-size:28px;flex-shrink:0;z-index:2;
+}
+.stat-content{z-index:2}
+.stat-label{
+ font-size:13px;font-weight:600;
+ text-transform:uppercase;letter-spacing:.04em;
+ margin-bottom:5px;
+}
+.stat-value{
+ font-family:Georgia,serif;
+ font-size:40px;
+ line-height:1;
+ color:#0f172a;
+}
+.stat-sub{margin-top:10px;color:#6b7280;}
+.raised .stat-icon{background:linear-gradient(145deg,#174e3e,#052d27);}
+.raised .stat-label{color:#174e3e;}
+.candidates .stat-icon{background:linear-gradient(145deg,#c2ace6,#8f6ac8);}
+.candidates .stat-label{color:#8f6ac8;}
+.elections .stat-icon{background:linear-gradient(145deg,#e7a68d,#cf785d);}
+.elections .stat-label{color:#cf785d;}
+.stat-wave{ position:absolute; right:-20px; bottom:-25px; width:70%; height:90px; border-top:1px solid rgba(0,0,0,.15);
+ border-radius:60% 0 0 0; opacity:.45;
+}
   .race-section { margin-bottom: 28px; }
-  .race-badge { display: inline-block; background: #dbeafe; color: #1d4ed8; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
+  
+  .race-badge { 
+    display: inline-block; 
+    font-size: 12px; 
+    font-weight: 600; 
+    padding: 3px 10px; 
+    border-radius: 4px; 
+    margin-bottom: 10px; 
+  }
+
+  /*candidate table*/
+
   .candidate-table { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
-  .table-header { display: grid; grid-template-columns: 1fr 160px 160px; padding: 10px 16px; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: .07em; border-bottom: 1px solid #e5e7eb; }
+  .table-header { display: grid; grid-template-columns: 1fr 175px 165px; padding: 10px 16px; font-size: 14px; color: #9ca3af; text-transform: uppercase; letter-spacing: .07em; border-bottom: 1px solid #e5e7eb; }
   .candidate-row { display: grid; grid-template-columns: 1fr 160px 160px; padding: 14px 16px; align-items: center; border-bottom: 1px solid #e5e7eb; cursor: pointer; transition: background .15s; }
   .candidate-row:last-child { border-bottom: none; }
   .candidate-row:hover { background: #f9fafb; }
-  .subtotal-row { display: grid; grid-template-columns: 1fr 160px 160px; padding: 10px 16px; font-size: 13px; color: #9ca3af; border-top: 1px solid #e5e7eb; background: #f9fafb; }
+  .subtotal-row { display: grid; grid-template-columns: 1fr 160px 160px; padding: 10px 16px; font-size: 13px; border-top: 1px solid #e5e7eb; background: #f9fafb; }
   .cand-info { display: flex; align-items: center; gap: 10px; }
-  .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-  .cand-name { font-size: 14px; font-weight: 500; color: #111827; }
-  .raised-col { font-size: 14px; font-weight: 600; color: #111827; }
+  .avatar {font-family: serif; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .cand-name { font-size: 15px; font-weight: 500; color: #111827; }
+  .raised-col { font-size: 15px; font-weight: 600;  }
   .share-col { display: flex; align-items: center; gap: 8px; }
   .share-bar-bg { flex: 1; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; }
   .share-bar { height: 100%; border-radius: 3px; }
@@ -66,7 +132,7 @@
   .detail-panel.active { display: block; }
 
   .data-table { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; }
-  .data-table-header { display: grid; padding: 10px 16px; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: .07em; border-bottom: 1px solid #e5e7eb; }
+  .data-table-header { display: grid; padding: 15px 22px; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: .07em; border-bottom: 1px solid #e5e7eb; }
   .data-row { display: grid; padding: 12px 16px; font-size: 13px; border-bottom: 1px solid #e5e7eb; align-items: center; color: #111827; }
   .data-row:last-child { border-bottom: none; }
   .data-row:hover { background: #f9fafb; }
@@ -78,18 +144,20 @@
   .type-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 13px; color: #374151; }
   .type-bar-label { width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .type-bar-bg { flex: 1; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
-  .type-bar-fill { height: 100%; border-radius: 4px; background: #2563eb; }
+  .type-bar-fill { height: 100%; border-radius: 4px; }
   .type-bar-pct { font-size: 12px; color: #9ca3af; width: 40px; text-align: right; }
   .type-bar-amt { font-size: 13px; font-weight: 600; width: 100px; text-align: right; color: #111827; }
 
   .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
   .type-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px 20px; }
-  .type-card-label { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
-  .type-card-value { font-size: 20px; font-weight: 700; color: #2563eb; }
+  .type-card-label { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+  .type-card-value { font-size: 20px; font-weight: 700; }
   .type-card-sub { font-size: 12px; color: #9ca3af; margin-top: 4px; }
 
   h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; color: #111827; }
   .page-sub { font-size: 13px; color: #9ca3af; margin-bottom: 24px; }
+  .page-sub .page-sub-date { color: #c79072; 
+}
   .empty { color: #9ca3af; font-size: 13px; padding: 24px 16px; }
 
   .color-0 { background: #3b82f6; } .color-1 { background: #f59e0b; } .color-2 { background: #10b981; }
@@ -174,12 +242,17 @@
 <!-- Sidebar / Drawer -->
 <div id="sidebar">
   <div class="sidebar-header">
-    <div class="sidebar-cycle">Created by Branch Four Inc.</div>
+    
+   <div class="sidebar-flex"> <div class="sidebar-cycle">Created by:</div>
+    <img class="sidebar-logo" src="icons/brlogo.png"></div> 
     <div class="sidebar-title">Campaign<br>Finance Tracker</div>
   </div>
   <div id="sidebar-summary-nav">
     <nav>
-      <a class="active" data-page="summary"><span class="icon">▦</span> Summary</a>
+      <a class="active btn-grad btn-border" data-page="summary">
+    <span class="icon">❖</span>
+    <span>Summary</span>
+</a>
     </nav>
   </div>
   <div id="sidebar-detail-nav" style="display:none">
@@ -206,7 +279,91 @@
 <div id="geo-tooltip" class="geo-tooltip"></div>
 
 <script>
-const COLORS = ['#3b82f6','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+const COLORS = ['#1f483d','#bf8b3d','#af9bd1','#b76583','#af9bd1','#bf8b3d'];
+const contributorColors = { //for top contributors
+    "(Unknown)": {
+      background: "#E5E7EB",
+      text: "#6B7280"
+    },
+    "Individual": {
+      background: "#DBEAFE",
+      text: "#2563EB"
+    },
+    "Political Committee": {
+      background: "#FCE7F3",
+      text: "#DB2777"
+    },
+    "Candidate/Candidate Spouse": {
+      background: "#FEF3C7",
+      text: "#D97706"
+    },
+    "Candidate Family Member": {
+      background: "#F3E8FF",
+      text: "#7C3AED"
+    },
+    "Partnership, Including Llps": {
+      background: "#DCFCE7",
+      text: "#16A34A"
+    },
+    "Political Action Committee (PAC) | Political Committee": {
+      background: "#FEE2E2",
+      text: "#DC2626"
+    },
+    "Union": {
+      background: "#CCFBF1",
+      text: "#0F766E"
+    },
+    "Corporation": {
+      background: "#E0F2FE",
+      text: "#0284C7"
+    },
+    "Political Action Committee (PAC)": {
+      background: "#FAE8FF",
+      text: "#C026D3"
+    }
+  };
+  const contributorBarColors = {//for bar charts
+    "(Unknown)": {
+      background: "#ca9545",
+      text: "#6B7280"
+    },
+    "Individual": {
+      background: "#6f62cd",
+      text: "#2563EB"
+    },
+    "Political Committee": {
+      background: "#ca7e7d",
+      text: "#DB2777"
+    },
+    "Candidate/Candidate Spouse": {
+      background: "#893332",
+      text: "#D97706"
+    },
+    "Candidate Family Member": {
+      background: "#9ac6bd",
+      text: "#7C3AED"
+    },
+    "Partnership, Including Llps": {
+      background: "#f43a3b",
+      text: "#16A34A"
+    },
+    "Political Action Committee (PAC) | Political Committee": {
+      background: "#3c7e2d",
+      text: "#DC2626"
+    },
+    "Union": {
+      background: "#0a96aa",
+      text: "#0F766E"
+    },
+    "Corporation": {
+      background: "#E0F2FE",
+      text: "#0284C7"
+    },
+    "Political Action Committee (PAC)": {
+      background: "#3c7e2d",
+      text: "#C026D3"
+    },
+  };
 
 function fmt(n) { return '$' + Number(n).toLocaleString(undefined, {minimumFractionDigits:0, maximumFractionDigits:0}); }
 function initials(name) { return name.split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join(''); }
@@ -280,16 +437,23 @@ function renderSummary() {
   Object.entries(byRace).forEach(([race, candidates], ri) => {
     const sorted = [...candidates].sort((a,b) => +b['Total Contributions'] - +a['Total Contributions']);
     const raceTotal = sorted.reduce((s,r) => s + +r['Total Contributions'], 0);
+    let savedColor;
+    let i = 0;
 
     const rows = sorted.map((c, ci) => {
       const pct = raceTotal ? Math.round(+c['Total Contributions'] / raceTotal * 100) : 0;
       const color = COLORS[(ri * 3 + ci) % COLORS.length];
+      if(i == 0)
+      {
+        savedColor = color;
+        i += 1;
+      }
       return `<div class="candidate-row" data-id="${c.CandidateID}" data-name="${c.Candidate}">
         <div class="cand-info">
-          <div class="avatar" style="background:${color}22;color:${color}">${initials(c.Candidate)}</div>
+          <div class="avatar" style="background-color:${color};color:${'#fcfcfc'}">${initials(c.Candidate)}</div>
           <div class="cand-name">${c.Candidate}</div>
         </div>
-        <div class="raised-col">${fmt(c['Total Contributions'])}</div>
+        <div class="raised-col" style="color:${color}">${fmt(c['Total Contributions'])}</div>
         <div class="share-col">
           <div class="share-bar-bg"><div class="share-bar" style="width:${pct}%;background:${color}"></div></div>
           <span class="share-pct">${pct}%</span>
@@ -298,7 +462,8 @@ function renderSummary() {
     }).join('');
 
     racesHTML += `<div class="race-section">
-      <div class="race-badge">${race}</div>
+      
+      <div class="race-badge" style="color:${savedColor}"> ${race}</div>
       <div class="candidate-table">
         <div class="table-header"><span>Candidate</span><span>Total Raised</span><span>Share of Election</span></div>
         ${rows}
@@ -309,13 +474,43 @@ function renderSummary() {
 
   const numRaces = Object.keys(byRace).length;
   document.getElementById('summary').innerHTML = `
+
+  
     <h2>Summary</h2>
-    <div class="page-sub">Data Updated: ${DATA.params['Data End']}</div>
-    <div class="stat-grid">
-      <div class="stat-card"><div class="stat-label">Total Raised</div><div class="stat-value">${fmt(grandTotal)}</div><div class="stat-sub">All candidates</div></div>
-      <div class="stat-card"><div class="stat-label">Candidates</div><div class="stat-value">${totals.length}</div></div>
-      <div class="stat-card"><div class="stat-label">Elections</div><div class="stat-value">${numRaces}</div></div>
-    </div>
+    <div class="page-sub">Data Updated:
+    <span class="page-sub-date">${DATA.params['Data End']}</span></div>
+
+<div class="stat-grid">
+<div class="stat-card raised">
+<div class="stat-icon">$</div>
+<div class="stat-content">
+<div class="stat-label">Total Raised</div>
+<div class="stat-value stat-total">${fmt(grandTotal)}</div>
+<div class="stat-sub">All candidates</div>
+</div>
+<div class="stat-wave"></div>
+</div>
+
+<div class="stat-card candidates">
+<div class="stat-icon">👥</div>
+<div class="stat-content">
+<div class="stat-label">Candidates</div>
+<div class="stat-value stat-cand">${totals.length}</div>
+</div>
+<div class="stat-wave"></div>
+</div>
+
+<div class="stat-card elections">
+<div class="stat-icon">🗳</div>
+<div class="stat-content">
+<div class="stat-label">Elections</div>
+<div class="stat-value">${numRaces}</div>
+</div>
+<div class="stat-wave"></div>
+</div>
+</div>
+  
+
     ${racesHTML}`;
 
   document.querySelectorAll('.candidate-row').forEach(row => {
@@ -368,9 +563,9 @@ function renderCandidateDetail(id, name) {
   document.getElementById('candidate-detail').innerHTML = `
     <h2>${name}</h2>
     <div class="page-sub">Campaign finance detail</div>
-    <div id="panel-contrib-types" class="detail-panel active">${renderContribTypes(types)}</div>
-    <div id="panel-pac" class="detail-panel">${renderSimpleTable(pacs, ['Contributor Name','Total Contributions'])}</div>
-    <div id="panel-corporate" class="detail-panel">${renderSimpleTable(corps, ['Contributor Name','Total Contributions'])}</div>
+    <div id="panel-contrib-types" class="detail-panel active"> ${renderContribTypes(types)}</div>
+    <div id="panel-pac" class="detail-panel"> ${renderSimpleTable(pacs, ['Contributor Name','Total Contributions'])}</div>
+    <div id="panel-corporate" class="detail-panel"> ${renderSimpleTable(corps, ['Contributor Name','Total Contributions'])}</div>
     <div id="panel-top" class="detail-panel">${renderTopContribs(tops)}</div>
     <div id="panel-geography" class="detail-panel"></div>`;
 
@@ -378,16 +573,40 @@ function renderCandidateDetail(id, name) {
 }
 
 function renderContribTypes(types) {
+
   if (!types.length) return '<div class="empty">No data available.</div>';
   const total = types.reduce((s,r) => s + +r['Total Contributions'], 0);
   const sorted = [...types].sort((a,b) => +b['Total Contributions'] - +a['Total Contributions']);
 
-  const cards = sorted.slice(0,3).map(r => `
+  const cards = sorted.slice(0,3).map(r => {
+    const color =
+        contributorBarColors[r['Contributor Type']] || {
+            background: "#E5E7EB",
+            text: "#6B7280"
+        };
+
+    return `
+        <div class="type-card">
+            <div class="type-card-label" style="color:${color.background}">
+                ${r['Contributor Type']} 
+            </div>
+            <div class="type-card-value" style="color:${color.background}">
+                ${fmt(r['Total Contributions'])}
+            </div>
+            <div class="type-card-sub">
+                ${r['Number of Contributions']} contributions
+            </div>
+        </div>
+    `;
+}).join('');
+
+  /*const cards = sorted.slice(0,3).map(r => `
     <div class="type-card">
       <div class="type-card-label">${r['Contributor Type']}</div>
       <div class="type-card-value" style="color:#2563eb">${fmt(r['Total Contributions'])}</div>
       <div class="type-card-sub">${r['Number of Contributions']} contributions</div>
     </div>`).join('');
+  
 
   const bars = sorted.map(r => {
     const pct = total ? Math.round(+r['Total Contributions'] / total * 100) : 0;
@@ -397,7 +616,42 @@ function renderContribTypes(types) {
       <div class="type-bar-pct">${pct}%</div>
       <div class="type-bar-amt">${fmt(r['Total Contributions'])}</div>
     </div>`;
-  }).join('');
+  }).join('');*/
+
+  const bars = sorted.map(r => {
+    const pct = total
+        ? Math.round(+r['Total Contributions'] / total * 100)
+        : 0;
+
+    const color =
+        contributorBarColors[r['Contributor Type']] || {
+            background: "#E5E7EB",
+            text: "#6B7280"
+        };
+
+    return `
+        <div class="type-bar-row">
+            <div class="type-bar-label">${r['Contributor Type']}</div>
+
+            <div class="type-bar-bg">
+                <div
+                    class="type-bar-fill"
+                    style="width:${pct}%; background:${color.background};">
+                </div>
+            </div>
+
+            <div
+                class="type-bar-pct"
+                style="color:${color.background};">
+                ${pct}%
+            </div>
+
+            <div class="type-bar-amt">
+                ${fmt(r['Total Contributions'])}
+            </div>
+        </div>
+    `;
+}).join('');
 
   return `<div class="type-grid">${cards}</div>
     <div class="candidate-table" style="padding:20px">${bars}</div>`;
@@ -417,7 +671,7 @@ function renderSimpleTable(rows, cols) {
   </div>`;
 }
 
-function renderTopContribs(rows) {
+/*function renderTopContribs(rows) {
   if (!rows.length) return '<div class="empty">No data available.</div>';
   const sorted = [...rows].sort((a,b) => +b['Total Contributions'] - +a['Total Contributions']);
   const tableRows = sorted.map(r => `
@@ -430,6 +684,67 @@ function renderTopContribs(rows) {
     <div class="data-table-header cols-3"><span>Name</span><span>Type</span><span>Amount</span></div>
     ${tableRows}
   </div>`;
+}*/
+
+function renderTopContribs(rows) {
+  if (!rows.length) {
+    return '<div class="empty">No data available.</div>';
+  }
+
+  const sorted = [...rows].sort(
+    (a, b) =>
+      Number(b["Total Contributions"]) -
+      Number(a["Total Contributions"])
+  );
+
+  const tableRows = sorted.map(r => {
+    const contributorType = r["Contributor Type"] || "Unknown";
+
+    const typeKey = contributorType
+      .trim()
+      .toLowerCase()
+      .replace(/[()]/g, "");
+
+    const colors = contributorColors[contributorType] || {
+      background: "#F3F4F6",
+      text: "#6B7280"
+    };
+
+    return `
+      <div class="data-row cols-3">
+        <div>${r["Contributor Name"]}</div>
+
+        <div>
+          <span
+            class="badge"
+            style="
+              background:${colors.background};
+              color:${colors.text};
+              border:1px solid ${colors.text};
+            "
+          >
+          ${contributorType}
+          </span>
+        </div>
+
+        <div class="amount">
+          ${fmt(r["Total Contributions"])}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="data-table">
+      <div class="data-table-header cols-3">
+        <span>Name</span>
+        <span>Type</span>
+        <span>Amount</span>
+      </div>
+
+      ${tableRows}
+    </div>
+  `;
 }
 
 // ── State abbreviation → FIPS lookup ──
@@ -477,17 +792,17 @@ async function renderGeography(id, name) {
     ? '<div class="empty">No location data available.</div>'
     : `<div class="instate-bar-wrap">
         <div class="instate-bar-track">
-          <div class="instate-bar-seg" ${segStyle(pctIn,  '#2563eb')}>${pctIn.toFixed(0)}%</div>
-          <div class="instate-bar-seg" ${segStyle(pctOut, '#10b981')}>${pctOut.toFixed(0)}%</div>
-          <div class="instate-bar-seg" ${segStyle(pctUnd, '#d1d5db')}>${pctUnd.toFixed(0)}%</div>
+          <div class="instate-bar-seg" ${segStyle(pctIn,  '#5d4f96')}>${pctIn.toFixed(0)}%</div>
+          <div class="instate-bar-seg" ${segStyle(pctOut, '#c39051')}>${pctOut.toFixed(0)}%</div>
+          <div class="instate-bar-seg" ${segStyle(pctUnd, '#ccc3c2')}>${pctUnd.toFixed(0)}%</div>
         </div>
         <div class="instate-legend">
           <div class="instate-legend-item">
-            <div class="instate-legend-dot" style="background:#2563eb"></div>
+            <div class="instate-legend-dot" style="background:#5d4f96"></div>
             In-state &nbsp;<span class="instate-legend-val">${fmt(inAmt)}</span>&nbsp;(${pctIn.toFixed(1)}%)
           </div>
           <div class="instate-legend-item">
-            <div class="instate-legend-dot" style="background:#10b981"></div>
+            <div class="instate-legend-dot" style="background:#c59353"></div>
             Out-of-state &nbsp;<span class="instate-legend-val">${fmt(outAmt)}</span>&nbsp;(${pctOut.toFixed(1)}%)
           </div>
           ${undAmt > 0 ? `<div class="instate-legend-item">
@@ -508,21 +823,21 @@ async function renderGeography(id, name) {
   // 5-step threshold based on max value
   const step = maxAmt / 5;
   const thresholds = [step, step*2, step*3, step*4];
-  const GREEN = ['#e8f5e9','#a5d6a7','#66bb6a','#43a047','#2e7d32'];
+  const BLUE = ['#eae3ef','#e2d9eb','#b69bd2','#9475b9','#4c3883'];
   const GRAY  = '#f3f4f6';
 
   const colorScale = (v) => {
     if (!v) return GRAY;
     for (let i = 0; i < thresholds.length; i++) {
-      if (v <= thresholds[i]) return GREEN[i];
+      if (v <= thresholds[i]) return BLUE[i];
     }
-    return GREEN[4];
+    return BLUE[4];
   };
 
-  const legendHTML = GREEN.map((c, i) => `
+  const legendHTML = BLUE.map((c, i) => `
     <div class="geo-map-legend-item">
       <div class="geo-map-legend-swatch" style="background:${c}"></div>
-      ${i === GREEN.length - 1
+      ${i === BLUE.length - 1
         ? `&ge; ${fmt(thresholds[i-1])}`
         : `${fmt(i === 0 ? 0 : thresholds[i-1])} – ${fmt(thresholds[i])}`}
     </div>`).join('');
@@ -600,7 +915,7 @@ async function renderGeography(id, name) {
           .attr('dominant-baseline', 'central')
           .attr('font-size', '8')
           .attr('font-family', '-apple-system, BlinkMacSystemFont, sans-serif')
-          .attr('fill', '#374151')
+          .attr('fill', '#aca3c4')
           .attr('pointer-events', 'none')
           .text(fipsToAbbr[String(d.id).padStart(2,'0')] || '');
       });
