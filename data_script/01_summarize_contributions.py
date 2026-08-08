@@ -333,12 +333,12 @@ def main(input_dir: str,
     candidate_info = df.drop_duplicates(['Candidate'])[['Candidate', 'State', 'Location', 'Office', 'Pull_date']].reset_index(drop = True)
     
     # ADD KISHA SKIPPER IN MANUALLY
-    candidate_info = pd.concat([candidate_info, 
-               pd.DataFrame({'Candidate': 'Kisha Skipper (D)', 
-                             'State': 'Ny', 
-                             'Location': '15th District', 
-                             'Office': 'County Legislator', 
-                             'Pull_date': '2026-06-07'}, index = [0])], axis = 0)
+    #candidate_info = pd.concat([candidate_info, 
+    #           pd.DataFrame({'Candidate': 'Kisha Skipper (D)', 
+    #                         'State': 'Ny', 
+    #                         'Location': '15th District', 
+    #                         'Office': 'County Legislator', 
+    #                         'Pull_date': '2026-06-07'}, index = [0])], axis = 0)
     
     # sort candidates
     candidate_info = candidate_info.sort_values(['Location', 'Office', 'Candidate'])
@@ -421,12 +421,12 @@ def main(input_dir: str,
     summary['Total Contributions'] = round_amount(summary['Total Contributions'] )
     
     # ADD KISHA SKIPPER 
-    summary = pd.concat([pd.DataFrame({'CandidateID': 2,
-        'Candidate': 'Kisha Skipper (D)', 
-                             'Location': '15th District', 
-                             'Office': 'County Legislator', 
-                             'Total Contributions': 0}, index = [0]), 
-               summary], axis = 0)
+    #summary = pd.concat([pd.DataFrame({'CandidateID': 2,
+    #    'Candidate': 'Kisha Skipper (D)', 
+    #                         'Location': '15th District', 
+    #                         'Office': 'County Legislator', 
+    #                         'Total Contributions': 0}, index = [0]), 
+    #           summary], axis = 0)
     
     
 
