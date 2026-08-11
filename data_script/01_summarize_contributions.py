@@ -428,6 +428,13 @@ def main(input_dir: str,
     #                         'Total Contributions': 0}, index = [0]), 
     #           summary], axis = 0)
     
+    # ADD Thomas Fix Jr.
+    summary = pd.concat([pd.DataFrame({'CandidateID': 2,
+        'Candidate': 'Thomas Fix Jr. (R)', 
+                             'Location': '37th District', 
+                             'Office': 'State Senate', 
+                             'Total Contributions': 0}, index = [0]), 
+               summary], axis = 0)
     
 
 
