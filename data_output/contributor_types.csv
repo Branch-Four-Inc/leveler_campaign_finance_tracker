@@ -58,19 +58,27 @@ CandidateID,Candidate,Contributor Type,Total Contributions,Number of Contributio
 9,Anthony Merante (R),Union,1196.0,4
 10,Khristen M. Kerr (C),Candidate/Candidate Spouse,380.0,3
 10,Khristen M. Kerr (C),Individual,279.0,2
-12,Frank Jereis (D),(Unknown),11790.0,11
-12,Frank Jereis (D),Individual,118992.0,371
-12,Frank Jereis (D),"Partnership, Including Llps",750.0,2
-12,Frank Jereis (D),Political Action Committee (PAC),6330.0,10
-12,Frank Jereis (D),Political Committee,550.0,3
-12,Frank Jereis (D),Professional/Limited Liability Company (Pllc/Llc),4170.0,9
-12,Frank Jereis (D),Union,490.0,3
-13,Jeannette Garcia (D),Candidate Family Member,125.0,3
-13,Jeannette Garcia (D),Individual,24543.0,267
-13,Jeannette Garcia (D),Political Action Committee (PAC),1900.0,2
-13,Jeannette Garcia (D),Union,3000.0,1
-14,John Isaac (R),(Unknown),895.0,1
-14,John Isaac (R),Candidate Family Member,610.0,2
-14,John Isaac (R),Candidate/Candidate Spouse,250.0,1
-14,John Isaac (R),Individual,10292.0,111
-14,John Isaac (R),Sole Proprietorship,47.0,1
+11,Shelley Mayer (D),(Unknown),173135.0,30
+11,Shelley Mayer (D),Individual,75562.0,248
+11,Shelley Mayer (D),Other,2000.0,2
+11,Shelley Mayer (D),"Partnership, Including Llps",6250.0,15
+11,Shelley Mayer (D),Political Action Committee (PAC),184225.0,173
+11,Shelley Mayer (D),Political Committee,1850.0,7
+11,Shelley Mayer (D),Professional/Limited Liability Company (Pllc/Llc),1500.0,3
+11,Shelley Mayer (D),Union,1200.0,2
+13,Frank Jereis (D),(Unknown),11790.0,11
+13,Frank Jereis (D),Individual,118992.0,371
+13,Frank Jereis (D),"Partnership, Including Llps",750.0,2
+13,Frank Jereis (D),Political Action Committee (PAC),6330.0,10
+13,Frank Jereis (D),Political Committee,550.0,3
+13,Frank Jereis (D),Professional/Limited Liability Company (Pllc/Llc),4170.0,9
+13,Frank Jereis (D),Union,490.0,3
+14,Jeannette Garcia (D),Candidate Family Member,125.0,3
+14,Jeannette Garcia (D),Individual,24543.0,267
+14,Jeannette Garcia (D),Political Action Committee (PAC),1900.0,2
+14,Jeannette Garcia (D),Union,3000.0,1
+15,John Isaac (R),(Unknown),895.0,1
+15,John Isaac (R),Candidate Family Member,610.0,2
+15,John Isaac (R),Candidate/Candidate Spouse,250.0,1
+15,John Isaac (R),Individual,10292.0,111
+15,John Isaac (R),Sole Proprietorship,47.0,1
