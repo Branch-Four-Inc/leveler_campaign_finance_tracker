@@ -272,8 +272,8 @@ def main(input_dir: str,
     
     input_dir = '../raw_contributions/'
     output_dir = '../data_output/'
-    contribution_start = "2024-11-09"
-    contribution_end = "2026-06-06"
+    contribution_start = "2024-11-06"
+    contribution_end = "2026-08-08"
     newsroom = 'The Leveler News'
     
     file_names = [f for f in os.listdir(args.input_dir) if os.path.isfile(os.path.join(args.input_dir, f))]
