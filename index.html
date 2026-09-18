@@ -32,9 +32,9 @@
   .nav-back button { background: none; border: none; color: #9ca3af; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 10px; }
   .nav-back button:hover { color: #d7ae6e; }
   .nav-section { padding: 8px 20px 4px; font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: .1em; }
-  .btn-grad { background-image: linear-gradient(to right, #372f59 0%, #17182b 51%, #17182b 100%);}
-  .btn-grad { margin: 10px; padding: 13px 12px; transition: 0.5s; background-size: 200% auto; border-radius: 9px; display: flex; outline: none; color: #fff; text-decoration: none; border: 1px solid transparent; background-image: linear-gradient(to right, #372f59 0%, #17182b 50%, #17182b 100%), linear-gradient(to right, #d7ae6e 0%, #17182b 40%, #17182b 100%); background-origin: border-box; background-clip: padding-box, border-box; white-space: nowrap; }
-  .btn-grad:hover {  background-position: right center; color: #d7ae6e; }
+  .btn-grad { margin: 10px; padding: 13px 12px; border-radius: 9px; white-space: nowrap; }
+  .btn-grad.active { transition: 0.5s; background-size: 200% auto; display: flex; outline: none; text-decoration: none; border: 1px solid transparent; background-image: linear-gradient(to right, #372f59 0%, #17182b 50%, #17182b 100%), linear-gradient(to right, #d7ae6e 0%, #17182b 40%, #17182b 100%); background-origin: border-box; background-clip: padding-box, border-box; }
+  .btn-grad.active:hover { background-position: right center; color: #d7ae6e; }
 
 
   #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 10; }
@@ -54,40 +54,42 @@
 
   .stat-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(10px, 2vw, 16px);
   margin-bottom: 32px;
 }
 .stat-card {
   position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 20px;
+  gap: clamp(12px, 2vw, 20px);
   min-height: 145px;
-  padding: 28px 24px;
+  padding: clamp(16px, 3vw, 28px) clamp(14px, 2.5vw, 24px);
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(15,23,42,.05);
+  min-width: 0;
 }
 .stat-card:first-child{border-left:5px solid #d4a64a;}
 .stat-icon{
- width:62px;height:62px;border-radius:50%;
+ width:clamp(44px, 6vw, 62px);height:clamp(44px, 6vw, 62px);border-radius:50%;
  display:flex;align-items:center;justify-content:center;
- color:white;font-size:28px;flex-shrink:0;z-index:2;
+ color:white;font-size:clamp(18px, 2.5vw, 28px);flex-shrink:0;z-index:2;
 }
-.stat-content{z-index:2}
+.stat-content{z-index:2; min-width: 0;}
 .stat-label{
- font-size:13px;font-weight:600;
+ font-size:clamp(11px, 1.4vw, 13px);font-weight:600;
  text-transform:uppercase;letter-spacing:.04em;
  margin-bottom:5px;
 }
 .stat-value{
  font-family:Georgia,serif;
- font-size:40px;
- line-height:1;
+ font-size:clamp(22px, 4vw, 40px);
+ line-height:1.1;
  color:#0f172a;
+ overflow-wrap: break-word;
 }
 .stat-sub{margin-top:10px;color:#6b7280;}
 .raised .stat-icon{background:linear-gradient(145deg,#174e3e,#052d27);}
@@ -99,6 +101,20 @@
 .stat-wave{ position:absolute; right:-20px; bottom:-25px; width:70%; height:90px; border-top:1px solid rgba(0,0,0,.15);
  border-radius:60% 0 0 0; opacity:.45;
 }
+  .filter-bar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .filter-select {
+    font-family: inherit;
+    font-size: 14px;
+    color: #111827;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    min-width: 160px;
+  }
+  .filter-select:focus { outline: none; border-color: #d7ae6e; }
+
   .race-section { margin-bottom: 28px; }
   
   .race-badge {
@@ -249,11 +265,6 @@
     #topbar { display: flex; }
 
     #main { padding: 16px; overflow-y: auto; }
-
-    .stat-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
-    .stat-card { padding: 12px 10px; }
-    .stat-value { font-size: 18px; }
-    .stat-label { font-size: 10px; }
 
     .table-header { grid-template-columns: 1fr 90px; }
     .table-header span:nth-child(3) { display: none; }
@@ -752,10 +763,47 @@ function renderHighlightCard(card, color) {
 
 function renderSummary() {
   const totals = DATA.total_contributions;
-  const grandTotal = totals.reduce((s,r) => s + +r['Total Contributions'], 0);
+  const offices = [...new Set(totals.map(r => r.Office))].sort();
+  const locations = [...new Set(totals.map(r => r.Location))].sort();
+
+  document.getElementById('summary').innerHTML = `
+
+
+    <h2>All Candidates</h2>
+    <div class="page-sub">Data Updated:
+    <span class="page-sub-date">${DATA.params['Data End']}</span></div>
+
+    <div class="filter-bar">
+      <select id="office-filter" class="filter-select">
+        <option value="">All Offices</option>
+        ${offices.map(o => `<option value="${o}">${o}</option>`).join('')}
+      </select>
+      <select id="location-filter" class="filter-select">
+        <option value="">All Locations</option>
+        ${locations.map(l => `<option value="${l}">${l}</option>`).join('')}
+      </select>
+    </div>
+
+    <div id="races-container"></div>`;
+
+  document.getElementById('office-filter').addEventListener('change', renderRaces);
+  document.getElementById('location-filter').addEventListener('change', renderRaces);
+
+  renderRaces();
+}
+
+function renderRaces() {
+  const totals = DATA.total_contributions;
+  const officeFilter = document.getElementById('office-filter').value;
+  const locationFilter = document.getElementById('location-filter').value;
+
+  const filtered = totals.filter(r =>
+    (!officeFilter || r.Office === officeFilter) &&
+    (!locationFilter || r.Location === locationFilter)
+  );
 
   const byRace = {};
-  totals.forEach(r => {
+  filtered.forEach(r => {
     const key = `${r.Office} – ${r.Location}`;
     (byRace[key] = byRace[key] || []).push(r);
   });
@@ -789,7 +837,7 @@ function renderSummary() {
     }).join('');
 
     racesHTML += `<div class="race-section">
-      
+
       <div class="race-badge" style="color:${savedColor}"> ${race}</div>
       <div class="candidate-table">
         <div class="table-header"><span>Candidate</span><span>Total Raised</span><span>Share of Election</span></div>
@@ -799,46 +847,7 @@ function renderSummary() {
     </div>`;
   });
 
-  const numRaces = Object.keys(byRace).length;
-  document.getElementById('summary').innerHTML = `
-
-  
-    <h2>All Candidates</h2>
-    <div class="page-sub">Data Updated:
-    <span class="page-sub-date">${DATA.params['Data End']}</span></div>
-
-<div class="stat-grid">
-<div class="stat-card raised">
-<div class="stat-icon">$</div>
-<div class="stat-content">
-<div class="stat-label">Total Raised</div>
-<div class="stat-value stat-total">${fmt(grandTotal)}</div>
-<div class="stat-sub">All candidates</div>
-</div>
-<div class="stat-wave"></div>
-</div>
-
-<div class="stat-card candidates">
-<div class="stat-icon">👥</div>
-<div class="stat-content">
-<div class="stat-label">Candidates</div>
-<div class="stat-value stat-cand">${totals.length}</div>
-</div>
-<div class="stat-wave"></div>
-</div>
-
-<div class="stat-card elections">
-<div class="stat-icon">🗳</div>
-<div class="stat-content">
-<div class="stat-label">Elections</div>
-<div class="stat-value">${numRaces}</div>
-</div>
-<div class="stat-wave"></div>
-</div>
-</div>
-  
-
-    ${racesHTML}`;
+  document.getElementById('races-container').innerHTML = racesHTML || '<div class="empty">No results match the selected filters.</div>';
 
   document.querySelectorAll('.candidate-row').forEach(row => {
     row.addEventListener('click', () => showCandidate(row.dataset.id, row.dataset.name));
